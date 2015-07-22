@@ -174,14 +174,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-1 col-sm-6 col-xs-12">
+                        <div class="col-md-2 col-sm-6 col-xs-12">
                             <div>
-                                <img class="img-responsive " id="productimage" src="../../../img/<%=pdqp.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="heighth:90px">
+                                <a href="detail.jsp?product=<%=pdqp.getProdid()%>"><img class="img-responsive " id="productimage" src="../../../img/<%=pdqp.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="heighth:90px"></a>
                             </div>
                         </div>
-                        <div class="col-md-1 col-sm-6 col-xs-12">
+                        <!--div class="col-md-1 col-sm-6 col-xs-12">
 
-                        </div>
+                        </div-->
 
                         <div class="col-md-7 col-sm-6 col-xs-12 text-center thumbnail">
                             <h5>Sentiment Score</h5>

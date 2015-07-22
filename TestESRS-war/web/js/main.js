@@ -551,8 +551,8 @@ function generateScatterGrapgh(productid,scatter){
         var w = parseInt(ob.aspects[ar[i]].freq);
         //console.log(v);
         //console.log(w);
-        c.push(w);
         c.push(v);
+        c.push(w);
         b={
             name: ar[i],
             color: 'rgba(223, 83, 83, .5)',
@@ -636,3 +636,8 @@ function scatterChart(data,p){
     });
 }
 
+da = [{
+            name: 'aspect',
+            color: 'rgba(223, 50, 50, .5)',
+            data: data
+        }];

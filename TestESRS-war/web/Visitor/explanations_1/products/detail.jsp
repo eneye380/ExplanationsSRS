@@ -137,28 +137,28 @@
     <!--jsp:getProperty name="aspectScore" property="scoreSet"/-->
     <%--=productScoresMap--%>
     <%
-                        String[] data = null;
-                        int n = 0;
-                        if (productScoresMap.containsKey(s)) {
-                            Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
-                            Set keyset = productScores.keySet();
-                            Iterator ite = keyset.iterator();
-                            Iterator it = keyset.iterator();
-                            int w = 0;
-                            while (it.hasNext()) {
-                                it.next();
-                                w++;
-                            }
-                            data = new String[w];
-                            while (ite.hasNext()) {
-                                String key = (String) ite.next();
-                                //Map<String, Number> value = productScores.get(key);
-                                data[n] = key;
-                                n++;
-                            }
-                        }
-                   %>
-                   <%--=data[0]--%>
+        String[] data = null;
+        int n = 0;
+        if (productScoresMap.containsKey(s)) {
+            Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
+            Set keyset = productScores.keySet();
+            Iterator ite = keyset.iterator();
+            Iterator it = keyset.iterator();
+            int w = 0;
+            while (it.hasNext()) {
+                it.next();
+                w++;
+            }
+            data = new String[w];
+            while (ite.hasNext()) {
+                String key = (String) ite.next();
+                //Map<String, Number> value = productScores.get(key);
+                data[n] = key;
+                n++;
+            }
+        }
+    %>
+    <%--=data[0]--%>
     <body id="body" onload="retrievePRJSONDetail('<%=s%>', '2')">
 
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
@@ -210,7 +210,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-md-3 col-sm-6 col-xs-12">
                             <div>
                                 <img class="img-responsive" src="../../../img/<%=pdqp.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="height:150px">
                             </div>
@@ -252,48 +252,81 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4 col-sm-6 col-xs-12 text-center thumbnail">
-                            
-                            <div class="btn-group text-center" style="margin-bottom:5px">
-                                <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="bar">bar</button>
-                                <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="line">line</button>
-                                <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="scatter" onclick="generateScatterGrapgh('<%=s%>','scatter')">scatter</button>
-                                <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="hide">hide</button>
-                                <!--button class="btn btn-success btn-xs" style="color:black;background: yellowgreen; border:greenyellow" id=""></button>
-                                <button class="btn btn-success btn-xs" style="color:black;background: yellowgreen; border:greenyellow" id=""></button-->
+                        <div class="col-md-9 col-sm-6 col-xs-12 text-center thumbnail">
+                            <div class="row">                                
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m11"><span class="desc">Price: </span><%=pdqp.getPrice()%></p>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p><span class="desc">Star Rating: </span><%=pdqp.getRating()%></p>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m21"><span class="desc">Rank: </span><%=pdqp.getRank()%></p>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m21"><span class="desc">Date: </span><%=pdqp.getDate()%></p>
+                                </div>
                             </div>
-                            <h5>Sentiment Score</h5>
-                            <div style="height:200px">
-                            <div id="<%=s%>" class="explanationbar" style="height:200px"></div>  
-                            <div id="<%=s%>scatter" class="explanationscatter" style="height:200px"></div>  
+                            <div class="row">
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m31"><span class="desc">Category: </span><%=pdqp.getCategory()%></p>
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m41"><span class="desc">No. of Questions: </span><%=pdqp.getNquestions()%></p> 
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m51"><span class="desc">No. of Comments: </span><%=pdqp.getNcomments()%></p>                                                
+                                </div>
+                                <div class="col-md-3 col-sm-6 col-xs-12 text-center">
+                                    <p class="top_m61"><span class="desc">No. of Reviews: </span><%=pdqp.getNreviews()%></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <div class="btn-group text-center" style="margin-bottom:5px">
+                                        <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="bar">bar</button>
+                                        <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="line">line</button>
+                                        <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="scatter" onclick="generateScatterGrapgh('<%=s%>', 'scatter')">scatter</button>
+                                        <button class="btn btn-success btn-xs" style="color:black;background: gainsboro; border: gainsboro" id="hide">hide</button>
+                                        <!--button class="btn btn-success btn-xs" style="color:black;background: yellowgreen; border:greenyellow" id=""></button>
+                                        <button class="btn btn-success btn-xs" style="color:black;background: yellowgreen; border:greenyellow" id=""></button-->
+                                    </div>
+                                    <h5>Sentiment Score</h5>
+                                    <div style="height:300px">
+                                        <div id="<%=s%>" class="explanationbar" style="height:300px"></div>  
+                                        <div id="<%=s%>scatter" class="explanationscatter" style="height:300px"></div>  
+                                    </div>
+                                </div>
                             </div>
                         </div>   
-                        <div class="col-md-4 col-sm-6 col-xs-12 thumbnail" >
+                        <!--Description-->
+                        <!--div class="col-md-4 col-sm-6 col-xs-12 thumbnail" >
                             <p class="text-center">Description</p>
                             <div style="height:150px;overflow: auto">
                                 <div  style="background: grey;padding:2px">
                                     <div style="background: white;height:" id="desc_1">
-                                        <%
-                                            String r = pdqp.getRating();
-                                            double rr = 0.0;
-                                            if (r != null) {
-                                                if (!r.equalsIgnoreCase("null")) {
-                                                    rr = Double.parseDouble(r);
-                                                }
-                                            }
-                                        %>
-                                        <p><span class="desc">Rating: </span><%=pdqp.getRating()%></p>
-                                        <p class="top_m1"><span class="desc">Price: </span><%=pdqp.getPrice()%></p>
-                                        <p class="top_m2"><span class="desc">Rank: </span><%=pdqp.getRank()%></p>
-                                        <p class="top_m2"><span class="desc">Date: </span><%=pdqp.getDate()%></p>
-                                        <p class="top_m3"><span class="desc">Category: </span><%=pdqp.getCategory()%></p>
-                                        <p class="top_m4"><span class="desc">No. of Questions: </span><%=pdqp.getNquestions()%></p> 
-                                        <p class="top_m5"><span class="desc">No. of Comments: </span><%=pdqp.getNcomments()%></p>                                                
-                                        <p class="top_m6"><span class="desc">No. of Reviews: </span><%=pdqp.getNreviews()%></p>                                                
-                                    </div>
-                                </div>
-                            </div>                                    
-                        </div>
+                        <%
+                            String r = pdqp.getRating();
+                            double rr = 0.0;
+                            if (r != null) {
+                                if (!r.equalsIgnoreCase("null")) {
+                                    rr = Double.parseDouble(r);
+                                }
+                            }
+                        %>
+                        <p><span class="desc">Rating: </span><%=pdqp.getRating()%></p>
+                        <p class="top_m1"><span class="desc">Price: </span><%=pdqp.getPrice()%></p>
+                        <p class="top_m2"><span class="desc">Rank: </span><%=pdqp.getRank()%></p>
+                        <p class="top_m2"><span class="desc">Date: </span><%=pdqp.getDate()%></p>
+                        <p class="top_m3"><span class="desc">Category: </span><%=pdqp.getCategory()%></p>
+                        <p class="top_m4"><span class="desc">No. of Questions: </span><%=pdqp.getNquestions()%></p> 
+                        <p class="top_m5"><span class="desc">No. of Comments: </span><%=pdqp.getNcomments()%></p>                                                
+                        <p class="top_m6"><span class="desc">No. of Reviews: </span><%=pdqp.getNreviews()%></p>                                                
+                    </div>
+                </div>
+            </div>                                    
+        </div-->
+                        <!-- End of Description-->
                     </div>                
 
 
@@ -367,78 +400,27 @@
                     <P><%%></p>
                         <%}%>
                         <%}--%>
-
-                    <div class="well">
-                        <div class="btn-group text-center" style="margin-bottom:5px">
-                            <button class="btn btn-success btn-xs" style="color:black;background: greenyellow; border:greenyellow" id="table">Table of Aspects</button>
-                            <button class="btn btn-success btn-xs" style="color:black;background: green; border:green" id="aspect">Negative and Positive Aspect</button>
-                            <button class="btn btn-success btn-xs" style="color:black;background: yellowgreen; border:greenyellow" id="review">Reviews</button>
-                        </div>
-                        <div class="row" id="aspects_table" style="display:none">
-                            <div class="col-lg-12">                                
-                                <h4 style="color:grey">Table of Aspects</h4>                                
-                                <div style="height:300px;overflow: scroll">
-                                    <table class="table" style="margin:auto">
-                                        <thead>                                        
-                                            <tr>
-                                                <th>Aspect</th>
-                                                <th>Score</th>
-                                                <th>Frequency</th>
-                                                <th>Gini</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody style="height:300px;overflow: scroll">
-                                            <%if (productScoresMap.containsKey(s)) {%>
-                                            <%
-                                                Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
-                                                Set keyset = productScores.keySet();
-                                                Iterator ite = keyset.iterator();
-                                            %>
-                                            <%while (ite.hasNext()) {%>
-                                            <%
-                                                String key = (String) ite.next();
-                                                Map<String, Number> value = (Map) productScores.get(key);
-                                                Number a = value.get("score");
-                                                double val = a.doubleValue();
-                                                double absVal = Math.abs(val);
-                                                double ii = val / absVal;
-                                            %>
-                                            <tr>
-                                                <td><%=key%></td>
-                                                <td><%=value.get("score")%></td>
-                                                <td><%=value.get("freq")%></td>
-                                                <td><%=value.get("gini")%></td>
-                                            </tr>
-
-                                            <%}%>
-                                            <%}%>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>                        
-                        </div>
-                        <div class='row' id='product_reviews' style='display:none'>
-                            <div class='col-md-12 col-sm-12 col-xs-12' >
-                                <h4>Customer Review</h4>
-                                <div class='thumbnail'>
-                                    <p style='color:rosybrown'>anony</p>
-                                    <p class='text-right'>great product</p>
-                                </div>
-                                <div class='thumbnail'>
-                                    <p style='color:rosybrown'>pxstar</p>
-                                    <p class='text-right'>This is an awesome camera for an entry level DSLR, in my mind Nikon's the best</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row" id="aspects_scores" style="display:none">                        
-                            <div class="col-md-6 col-sm-6 col-sm-12 well">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h5><em><span style='color:blue'>+ve</span></em><strong> sentiment's</strong></h5>
-                                    </div>
-                                </div>
-                                <div class="caption thumbnail">
-                                    <form>
+                </div>
+                <div class="well">
+                    <div class="btn-group text-center" style="margin-bottom:5px">
+                        <button class="btn btn-success btn-xs" style="color:black;background: greenyellow; border:greenyellow" id="table">Table of Aspects</button>
+                        <button class="btn btn-success btn-xs" style="color:black;background: green; border:green" id="aspect">Negative and Positive Aspect</button>
+                        <button class="btn btn-success btn-xs" style="color:black;background: yellowgreen; border:greenyellow" id="review">Reviews</button>
+                    </div>
+                    <div class="row" id="aspects_table" style="display:none">
+                        <div class="col-lg-12">                                
+                            <h4 style="color:grey">Table of Aspects</h4>                                
+                            <div style="height:300px;overflow: scroll">
+                                <table class="table" style="margin:auto">
+                                    <thead>                                        
+                                        <tr>
+                                            <th>Aspect</th>
+                                            <th>Score</th>
+                                            <th>Frequency</th>
+                                            <th>Gini</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="height:300px;overflow: scroll">
                                         <%if (productScoresMap.containsKey(s)) {%>
                                         <%
                                             Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
@@ -454,50 +436,107 @@
                                             double absVal = Math.abs(val);
                                             double ii = val / absVal;
                                         %>
-                                        <%if (ii == 1.0) {%>
-                                        <!--li><%=key%> : <%=a%></li-->
-                                        <label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label>
-                                            <%}%>
-                                            <%}%>
-                                            <%}%>
-                                    </form>
+                                        <tr>
+                                            <td><%=key%></td>
+                                            <td><%=value.get("score")%></td>
+                                            <td><%=value.get("freq")%></td>
+                                            <td><%=value.get("gini")%></td>
+                                        </tr>
+
+                                        <%}%>
+                                        <%}%>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class='row' id='product_reviews' style='display:none'>
+                        <div class='col-md-12 col-sm-12 col-xs-12' >
+                            <h4>Customer Review</h4>
+                            <div class='thumbnail'>
+                                <p style='color:rosybrown'>anony</p>
+                                <p class='text-right'>great product</p>
+                            </div>
+                            <div class='thumbnail'>
+                                <p style='color:rosybrown'>pxstar</p>
+                                <p class='text-right'>This is an awesome camera for an entry level DSLR, in my mind Nikon's the best</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="aspects_scores" style="display:none">                        
+                        <div class="col-md-6 col-sm-6 col-sm-12 well">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5><em><span style='color:blue'>+ve</span></em><strong> sentiment's</strong></h5>
                                 </div>
                             </div>
-                            <div class="col-md-6 col-sm-6 col-sm-12 well">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h5><em><span style='color:red'>-ve</span></em><strong> sentiment's</strong></h5>
-                                    </div>
+                            <div class="caption thumbnail">
+                                <form>
+                                    <ul>
+                                    <%if (productScoresMap.containsKey(s)) {%>
+                                    <%
+                                        Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
+                                        Set keyset = productScores.keySet();
+                                        Iterator ite = keyset.iterator();
+                                    %>
+                                    <%while (ite.hasNext()) {%>
+                                    <%
+                                        String key = (String) ite.next();
+                                        Map<String, Number> value = (Map) productScores.get(key);
+                                        Number a = value.get("score");
+                                        double val = a.doubleValue();
+                                        double absVal = Math.abs(val);
+                                        double ii = val / absVal;
+                                    %>
+                                    <%if (ii == 1.0) {%>
+                                    <!--li><%=key%> : <%=a%></li-->
+                                    <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
+                                    <li><%=key%></li>
+                                        <%}%>
+                                        <%}%>
+                                        <%}%>
+                                </ul>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-sm-12 well">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h5><em><span style='color:red'>-ve</span></em><strong> sentiment's</strong></h5>
                                 </div>
-                                <div class="caption thumbnail">
-                                    <form>
-                                        <%if (productScoresMap.containsKey(s)) {%>
-                                        <%
-                                            Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
-                                            Set keyset = productScores.keySet();
-                                            Iterator ite = keyset.iterator();
-                                        %>
-                                        <%while (ite.hasNext()) {%>
-                                        <%
-                                            String key = (String) ite.next();
-                                            Map<String, Number> value = (Map) productScores.get(key);
-                                            Number a = value.get("score");
-                                            double val = a.doubleValue();
-                                            double absVal = Math.abs(val);
-                                            double ii = val / absVal;
-                                        %>
-                                        <%if (ii == -1.0) {%>
-                                        <!--li><%=key%> : <%=a%></li-->
-                                        <label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label>
-                                            <%}%>
-                                            <%}%>
-                                            <%}%>
-                                    </form>
-                                </div>
+                            </div>
+                            <div class="caption thumbnail">
+                                <form>
+                                    <ul>
+                                    <%if (productScoresMap.containsKey(s)) {%>
+                                    <%
+                                        Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
+                                        Set keyset = productScores.keySet();
+                                        Iterator ite = keyset.iterator();
+                                    %>
+                                    <%while (ite.hasNext()) {%>
+                                    <%
+                                        String key = (String) ite.next();
+                                        Map<String, Number> value = (Map) productScores.get(key);
+                                        Number a = value.get("score");
+                                        double val = a.doubleValue();
+                                        double absVal = Math.abs(val);
+                                        double ii = val / absVal;
+                                    %>
+                                    <%if (ii == -1.0) {%>
+                                    <!--li><%=key%> : <%=a%></li-->
+                                    <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
+                                    <li><%=key%></li>
+                                        <%}%>
+                                        <%}%>
+                                        <%}%>
+                                    </ul>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!--/div-->
             </div>
 
 
