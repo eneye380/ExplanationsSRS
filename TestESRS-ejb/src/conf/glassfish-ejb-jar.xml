@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-ejb-jar PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 EJB 3.1//EN" "http://glassfish.org/dtds/glassfish-ejb-jar_3_1-1.dtd">
+<glassfish-ejb-jar>
+  <enterprise-beans>
+    <ejb>
+      <ejb-name>ProductSB</ejb-name>
+      <resource-ref>
+        <res-ref-name>esrs</res-ref-name>
+        <jndi-name>jdbc/db1409777_esrs</jndi-name>
+      </resource-ref>
+    </ejb>
+    <ejb>
+      <ejb-name>RecommendationSB</ejb-name>
+      <resource-ref>
+        <res-ref-name>esrs</res-ref-name>
+        <jndi-name>jdbc/db1409777_esrs</jndi-name>
+      </resource-ref>
+    </ejb>
+    <ejb>
+      <ejb-name>ProductSetSB</ejb-name>      
+    </ejb>
+  </enterprise-beans>
+</glassfish-ejb-jar>
