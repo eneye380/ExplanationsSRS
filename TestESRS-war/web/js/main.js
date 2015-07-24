@@ -17,7 +17,7 @@ $(document).ready(function () {
     });
     $("#button_aspect").click(function () {
 
-        //$(".aspect_selection").slideToggle();
+        $(".aspect_selection").slideToggle();
 
     });
     $("#aspects_scores").css("display","none");

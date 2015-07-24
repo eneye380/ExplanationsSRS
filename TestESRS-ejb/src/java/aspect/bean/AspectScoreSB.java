@@ -144,7 +144,7 @@ public class AspectScoreSB implements AspectScoreSBLocal {
         try {
             conn = DriverManager.getConnection(url, username, password);
             System.out.println(conn);
-            ps = conn.prepareStatement("SELECT * FROM productaspectsentiment WHERE prodid = ?");
+            ps = conn.prepareStatement("SELECT * FROM productaspectsentiment WHERE prodid = ? ");
 
             ps.setString(1, "" + productid + "");
 
