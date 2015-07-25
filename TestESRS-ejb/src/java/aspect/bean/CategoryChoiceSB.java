@@ -5,9 +5,9 @@
  */
 package aspect.bean;
 
+import aspect.db_connection.DatabaseConnection;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,33 +26,24 @@ public class CategoryChoiceSB implements CategoryChoiceSBLocal, Serializable {
     private String category;
     private String product;
     private ArrayList<CategoryChoiceSB> set;
-    private Connection conn = null;
-    private ResultSet rs = null;
-    private PreparedStatement ps = null, pp = null;
-    private String db = "db1409777_esrs";
-    private String url = "jdbc:mysql://localhost:3306/db1409777_esrs";
-    private String username = "root";
-    private String password = "";
-    
-    public CategoryChoiceSB(){
+    private Connection conn;
+    private ResultSet rs;
+    private PreparedStatement ps, pp;
+    private DatabaseConnection dbConnect;
+
+    public CategoryChoiceSB() {
+        System.out.println("const:CategoryChoiceSB()");
         set = new ArrayList<>();
     }
-    
+
     public void retrieveSet(String category) {
+        System.out.println("meth:retrieveSet(str category)");
         try {
 
-            try {
-                try {
-                    Class.forName("com.mysql.jdbc.Driver").newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    System.out.println("Error: unsuccessful Driver - " + ex);
-                }
-            } catch (ClassNotFoundException ex) {
-                System.out.println("Error: unsuccessful Driver - " + ex);
-            }
             System.out.println("Hello World");
 
-            conn = DriverManager.getConnection(url, username, password);
+            dbConnect = new DatabaseConnection();
+            conn = dbConnect.getDbConnection();
 
             System.out.println("Connection: " + conn);
 
@@ -60,81 +51,59 @@ public class CategoryChoiceSB implements CategoryChoiceSBLocal, Serializable {
             ps = conn.prepareStatement("SELECT * FROM productdetail WHERE category like ?");
 
             ps.setString(1, "%" + category + "%");
-            System.out.println("CATEGORY: "+category);
+            System.out.println("CATEGORY: " + category);
             rs = ps.executeQuery();
 
             int i = 0;
             while (rs.next()) {
                 CategoryChoiceSB a = new CategoryChoiceSB();
-                a.setProduct(rs.getString(1));                
+                a.setProduct(rs.getString(1));
                 this.setSet(a);
                 i++;
-                if(i == 12){
+                if (i == 12) {
                     break;
                 }
 
             }
             System.out.println("Count: " + i);
-            if (conn != null) {
-                try {
-                    conn.close();
-                    System.out.println("Connection closed ");
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                    System.out.println("ResultSet closed ");
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                    System.out.println("PreparedStatement closed ");
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
 
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
         } finally {
-
+            dbConnect.closeDbConnection(conn, rs, ps);
         }
 
     }
 
-    
-
     public String getProduct() {
+        System.out.println("meth:getProduct():Str");
         return product;
     }
 
     public void setProduct(String product) {
+        System.out.println("meth:setProduct(str prod)");
         this.product = product;
     }
 
     public ArrayList<CategoryChoiceSB> getSet() {
+        System.out.println("meth:getSet():arrl<CategoryChoiceSB>");
         return set;
     }
 
     public void setSet(CategoryChoiceSB set) {
-        
+        System.out.println("meth:setSet(CategoryChoiceSB)");
         this.set.add(set);
-    }    
+    }
 
     public String getCategory() {
+        System.out.println("meth:getCategory():Str");
         return category;
     }
 
     public void setCategory(String category) {
+        System.out.println("meth:setCategory():Str");
         this.category = category;
         this.retrieveSet(this.getCategory());
     }
-    
-    
+
 }

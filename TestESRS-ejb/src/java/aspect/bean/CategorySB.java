@@ -5,8 +5,8 @@
  */
 package aspect.bean;
 
+import aspect.db_connection.DatabaseConnection;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,47 +24,40 @@ public class CategorySB implements CategorySBLocal {
     // "Insert Code > Add Business Method")
     private ArrayList<CategorySB> catSet;
     private String category;
-    private Connection conn = null;
-    private ResultSet rs = null;
-    private PreparedStatement ps = null, pp = null;
-    private String db = "db1409777_esrs";
-    private String url = "jdbc:mysql://localhost:3306/db1409777_esrs";
-    private String username = "root";
-    private String password = "";
+    private Connection conn;
+    private ResultSet rs;
+    private PreparedStatement ps, pp;
+    private DatabaseConnection dbConnect;
 
     public CategorySB() {
+        System.out.println("cons:Category()");
         catSet = new ArrayList<>();
         category = "";
     }
 
     public void setCategory(String cat) {
+        System.out.println("meth:setCategory(str cat)");
         this.category = cat;
     }
 
     public String getCategory() {
+        System.out.println("meth:getCategory():Str");
         return this.category;
     }
 
     public void setCatSet(CategorySB c) {
+        System.out.println("meth:setCatSet(CategorySB c)");
         this.catSet.add(c);
     }
 
     public ArrayList<CategorySB> getCatSet() {
-
+        System.out.println("meth:getCatSet():arrl<categorysb>");
         try {
 
-            try {
-                try {
-                    Class.forName("com.mysql.jdbc.Driver").newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    System.out.println("Error: unsuccessful Driver - " + ex);
-                }
-            } catch (ClassNotFoundException ex) {
-                System.out.println("Error: unsuccessful Driver - " + ex);
-            }
             System.out.println("Hello World");
 
-            conn = DriverManager.getConnection(url, username, password);
+            dbConnect = new DatabaseConnection();
+            conn = dbConnect.getDbConnection();
 
             System.out.println("Connection: " + conn);
 
@@ -80,36 +73,14 @@ public class CategorySB implements CategorySBLocal {
                 i++;
             }
             System.out.println("Count: " + i);
-            if (conn != null) {
-                try {
-                    conn.close();
-                    System.out.println("Connection closed ");
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                    System.out.println("ResultSet closed ");
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                    System.out.println("PreparedStatement closed ");
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
+
             return this.catSet;
+
         } catch (SQLException ex) {
             System.out.println("Error: " + ex);
             return null;
         } finally {
-
+            dbConnect.closeDbConnection(conn, rs, ps);
         }
     }
 }

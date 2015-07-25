@@ -5,12 +5,11 @@
  */
 package aspect.bean;
 
+import aspect.db_connection.DatabaseConnection;
 import aspect.model.Productaspectsentiment;
 import aspect.model.ProductaspectsentimentPK;
-import aspect.model.Productdetail;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,13 +27,10 @@ public class AspectScoreSB implements AspectScoreSBLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    private Connection conn = null;
-    private ResultSet rs = null;
-    private PreparedStatement ps = null, pp = null;
-    private String db = "db1409777_esrs";
-    private String url = "jdbc:mysql://localhost:3306/db1409777_esrs";
-    private String username = "root";
-    private String password = "";
+    private Connection conn;
+    private ResultSet rs;
+    private PreparedStatement ps, pp;
+    DatabaseConnection dbConnect;
     private ArrayList<String> recommSet;
     private String prodid;
     private ArrayList<String> myProducts;
@@ -43,6 +39,7 @@ public class AspectScoreSB implements AspectScoreSBLocal {
     private Map<String, Map<String, Map<String, Number>>> scoreSet;
 
     public AspectScoreSB() {
+        System.out.println("cons:AspectScoreSB()");
         recommSet = null;
         prodid = null;
         myProducts = new ArrayList<>();
@@ -50,47 +47,57 @@ public class AspectScoreSB implements AspectScoreSBLocal {
     }
 
     public Map<String, Number> getAspectValue() {
+        System.out.println("meth:getAspectValue():Map<String, Number>>");
         return aspectValue;
     }
 
     public void setAspectValue(Map<String, Number> aspectValue) {
+        System.out.println("meth:setAspectValue(Map<String, Number>> aspectValue)");
         this.aspectValue = aspectValue;
     }
 
     public Map<String, Map<String, Number>> getAspectSet() {
+        System.out.println("meth:getAspectSet():Map<String, Map<String, Number>>");
         return aspectSet;
     }
 
     public void setAspectSet(Map<String, Map<String, Number>> aspectSet) {
+        System.out.println("meth:setAspectSet(Map<String, Map<String, Number>> aspectSet)");
         this.aspectSet = aspectSet;
     }
 
     public Map<String, Map<String, Map<String, Number>>> getScoreSet() {
+        System.out.println("meth:getScoreSet():Map<String, Map<String, Map<String, Number>>>");
         return scoreSet;
     }
 
     public void setScoreSet(Map<String, Map<String, Map<String, Number>>> scoreSet) {
+        System.out.println("meth:setScoreSet(Map<String, Map<String, Map<String, Number>>> scoreSet)");
         this.scoreSet = scoreSet;
     }
 
     public ArrayList<String> getRecommSet() {
+        System.out.println("meth:getRecommSet():arrl<str>");
         return recommSet;
     }
 
     public void setRecommSet(ArrayList<String> recommSet) {
+        System.out.println("meth:setRecommSet(arrl<str> recommSet):str");
         this.recommSet = recommSet;
     }
 
     public String getProdid() {
+        System.out.println("meth:getProdid():str");
         return prodid;
     }
 
     public void setProdid(String prodid) {
+        System.out.println("meth:setProdid(str prodid)");
         this.prodid = prodid;
     }
 
     public Map<String, Map<String, Map<String, Number>>> retrieveAspectScores() {
-
+        System.out.println("meth:retrieveAspectScores():Map<String, Map<String, Map<String, Number>>>");
         BigDecimal score;
         int freq;
         BigDecimal gini;
@@ -122,27 +129,16 @@ public class AspectScoreSB implements AspectScoreSBLocal {
             }
 
         }
-        System.out.println("MY SCORESET: "+scoreSet.toString());
+        System.out.println("MY SCORESET: " + scoreSet.toString());
         return scoreSet;
     }
 
     public ArrayList<Productaspectsentiment> processAspect(String productid) {
-        System.out.println("getdetail_999");
-        try {
-
-            try {
-                System.out.println("2");
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
-            } catch (InstantiationException | IllegalAccessException ex) {
-                System.out.println("Error: unsuccessful Driver - " + ex);
-            }
-        } catch (ClassNotFoundException ex) {
-            System.out.println("Error: unsuccessful Driver - " + ex);
-        }
-        System.out.println("Hello World");
+        System.out.println("meth:processAspect(str prodid):arrl<Productaspectsentiment>");
 
         try {
-            conn = DriverManager.getConnection(url, username, password);
+            dbConnect = new DatabaseConnection();
+            conn = dbConnect.getDbConnection();
             System.out.println(conn);
             ps = conn.prepareStatement("SELECT * FROM productaspectsentiment WHERE prodid = ? ");
 
@@ -162,27 +158,7 @@ public class AspectScoreSB implements AspectScoreSBLocal {
 
                 collec.add(q);
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    System.out.println("Error: " + ex);
-                }
-            }
+
             return collec;
 
         } catch (SQLException ex) {
@@ -191,7 +167,7 @@ public class AspectScoreSB implements AspectScoreSBLocal {
             return null;
 
         } finally {
-
+            dbConnect.closeDbConnection(conn, rs, ps);
         }
 
     }
