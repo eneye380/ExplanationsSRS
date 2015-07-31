@@ -17,7 +17,7 @@
 <div class="btn-group" style="margin-top: 5px;">
     <button type="button" class="btn btn-primary" id="button_category">Category</button>
 </div>
-<div class="category_selection" style="margin-top: 5px;display:none">
+<div class="category_selection" style="margin-top: 5px;display1:none">
     <div class="list-group ">
         <%for (int r = 0; r < c.size(); r++) {%>
         <%CategorySB ct = c.get(r);%>

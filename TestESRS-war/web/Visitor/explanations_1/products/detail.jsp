@@ -248,8 +248,9 @@
                     </div>
                     <div class="btn-group" style="margin-top: 10px">
                         <button type="button" class="btn btn-primary" id="button_aspect">Aspects</button>
+                        <button type="button" class="btn btn-primary" id="button_aspect_reset">Reset</button>
                     </div>
-                    <div class="aspect_selection" style="display:none;height:300px;overflow: auto">
+                    <div class="aspect_selection" style="display1:none;height:300px;overflow: auto">
                         <form onclick1="showMe()">
                             <%if (productScoresMap.containsKey(s)) {%>
             <%
@@ -272,7 +273,7 @@
             <%--if (ii == 1.0) {--%>
             <!--li><%=key%> : <%=a%></li-->
             <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
-            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect" class=""><%=key%></label></div>                            
+            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this)"><%=key%></label></div>                            
             <!--li><%=key%></li-->
             <%--}--%>
             <%}%>

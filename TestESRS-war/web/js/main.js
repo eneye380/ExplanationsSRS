@@ -20,49 +20,54 @@ $(document).ready(function () {
         $(".aspect_selection").slideToggle();
 
     });
-    $("#aspects_scores").css("display","none");
-        
-    $("#table").click(function(){
-        
-        $("#product_reviews").css("display","none");
-        $("#aspects_scores").css("display","none");
-        $("#aspects_table").css("display","block");
-        
-        
+    $("#button_aspect_reset").click(function () {
+
+        clearSelection();
+
     });
-    $("#aspect").click(function(){
-        $("#product_reviews").css("display","none");
-        $("#aspects_table").css("display","none");
-        $("#aspects_scores").css("display","block");
-        
+    $("#aspects_scores").css("display", "none");
+
+    $("#table").click(function () {
+
+        $("#product_reviews").css("display", "none");
+        $("#aspects_scores").css("display", "none");
+        $("#aspects_table").css("display", "block");
+
+
     });
-    $("#review").click(function(){   
-        
-        $("#aspects_table").css("display","none");
-        $("#aspects_scores").css("display","none");
-        $("#product_reviews").css("display","block");
+    $("#aspect").click(function () {
+        $("#product_reviews").css("display", "none");
+        $("#aspects_table").css("display", "none");
+        $("#aspects_scores").css("display", "block");
+
     });
-    
-    $("#hide").click(function(){   
-        
-        $(".explanationbar").css("display","none");
-        $(".explanationscatter").css("display","none");
-        
+    $("#review").click(function () {
+
+        $("#aspects_table").css("display", "none");
+        $("#aspects_scores").css("display", "none");
+        $("#product_reviews").css("display", "block");
     });
-    $("#bar").click(function(){   
-        
-        $(".explanationscatter").css("display","none");
-        $(".explanationbar").css("display","block");
-        
+
+    $("#hide").click(function () {
+
+        $(".explanationbar").css("display", "none");
+        $(".explanationscatter").css("display", "none");
+
     });
-    $("#scatter").click(function(){   
-        
-        $(".explanationbar").css("display","none");
-        $(".explanationscatter").css("display","block");
-        
+    $("#bar").click(function () {
+
+        $(".explanationscatter").css("display", "none");
+        $(".explanationbar").css("display", "block");
+
     });
-    
-    
+    $("#scatter").click(function () {
+
+        $(".explanationbar").css("display", "none");
+        $(".explanationscatter").css("display", "block");
+
+    });
+
+
 
 });
 
@@ -70,7 +75,66 @@ $(document).ready(function () {
 
 
 });
-function setDataArr(x){
+
+var tempobj, tempval;
+var asarr = [];
+
+var iii = 0;
+function aspectSelect(asp) {
+    var asarrele = [];
+    tempobj = asp;
+    asarrele.push(tempobj);
+    var aspect = asp.value;
+    asarr.push(aspect);
+    tempobj.disabled = true;
+    iii++;
+    if (asarr.length > 0) {
+        if (iii <= 10) {
+            writeMe("2", asarr);
+
+        } else {
+            var c = document.getElementsByClassName('aspect_cb');
+            console.log(c[9]);
+            for (var b = 0; b < c.length; b++) {
+                c[b].disabled = true;
+            }
+        }
+    }
+
+    console.log(tempobj);
+    console.log(window.document.location.search);
+    //tempobj.disabled = true;
+
+
+
+    tempval = aspect;
+    console.log(aspect);
+
+
+    var arr = getAspectArr();
+    console.log("LEN: " + arr.length);
+    console.log(arr);
+    if (arr.length < 10) {
+        console.log("king kong");
+        console.log(arr[2]);
+    }
+
+
+
+}
+function clearSelection() {
+    var c = document.getElementsByClassName('aspect_cb');
+
+    for (var b = 0; b < c.length; b++) {
+        c[b].disabled = false;
+        c[b].checked = false;
+    }
+    asarr = [] ;
+    iii = 0;
+    writeMe("2", asarr);
+
+}
+function setDataArr(x) {
     console.log("x-x:");
     console.log(x);
     var y = new Array();
@@ -79,7 +143,7 @@ function setDataArr(x){
 }
 
 
-function retrievePRJSONDetail(queryProduct,u) {
+function retrievePRJSONDetail(queryProduct, u) {
 
     console.log("Testing 2: retrievePRJSONDetail() working");
     console.log("Ajax call: Function Start");
@@ -102,11 +166,11 @@ function retrievePRJSONDetail(queryProduct,u) {
 
             setProductJSONDetails(msg);
             setQRArrayOfProductList(msg);
-            setQRJSONOfProductDetails(msg,queryProduct);
+            setQRJSONOfProductDetails(msg, queryProduct);
             console.log(msg);
             console.log("Ajax call: stop");
 
-            writeMe(u);
+            writeMe(u, null);
 
             status = true;
         },
@@ -142,20 +206,41 @@ function readMe() {
     }
     return p;
 }
-
-function writeMe(n) {
+var aspect = [];
+function setAspectArr(a) {
     var aspect1 = "camera";
     var aspect2 = "lens";
     var aspect3 = "quality";
     var aspect4 = "focus";
     var aspect5 = "dslr";
-    var aspect = [];
+    if (a === null) {
+        console.log(a);
+        console.log("a");
+    }
     aspect.push(aspect1);
     aspect.push(aspect2);
     aspect.push(aspect3);
     aspect.push(aspect4);
     aspect.push(aspect5);
+}
+function getAspectArr() {
+    var arr = aspect;
+    aspect = [];
+    return arr;
+    console.log("lklklklkmnmnmnmlklklklk");
+}
+var tt = " ";
+function writeMe(n, as) {
 
+    setAspectArr();
+    
+    if (as !== null) {
+        var aspectArr = as;
+    }else {
+        var aspectArr = getAspectArr();
+    }
+    console.log("len: " + aspectArr.length);
+    console.log(aspectArr);
     var xaxis;
     var datum;
 
@@ -170,24 +255,24 @@ function writeMe(n) {
         var ticks = [];
         var data1 = [];
         var ticks1 = [];
-        
-        var s = sum(i,aspect);
+
+        var s = sum(i, aspectArr);
         console.log(s);
-        for (var k = 0; k < aspect.length; k++) {
-            var q = 0.0;            
-            q = value(i.getJsonDetail().aspects[aspect[k]].score,s);
+        for (var k = 0; k < aspectArr.length; k++) {
+            var q = 0.0;
+            q = value(i.getJsonDetail().aspects[aspectArr[k]].score, s);
             var v = parseFloat(q);
             xaxis = [];
             datum = [];
             xaxis.push(k);
-            xaxis.push(aspect[k]);
+            xaxis.push(aspectArr[k]);
             datum.push(k);
-            datum.push(i.jsonDetail.aspects[aspect[k]].score);
+            datum.push(i.jsonDetail.aspects[aspectArr[k]].score);
 
             ticks.push(xaxis);
             data.push(datum);
 
-            ticks1.push(aspect[k]);
+            ticks1.push(aspectArr[k]);
             //data1.push(i.jsonDetail.aspects[aspect[k]].score);
             //data1.push(i.getJsonDetail().aspects[aspect[k]].score);
             data1.push(v);
@@ -225,7 +310,7 @@ function getQRArrayOfProductList() {
     return qandrPList;
 }
 var qandrPDetail = {};
-function setQRJSONOfProductDetails(msg,productid) {
+function setQRJSONOfProductDetails(msg, productid) {
     qandrPDetail = msg.productdetails;
     //generateScatterGrapgh(productid);
 }
@@ -500,10 +585,10 @@ function myChartS() {
     var chart = null;
     chart = new Highcharts.Chart(getOptionsS());
 }
-function sum(i,aspect){
-    
+function sum(i, aspect) {
+
     var sum = 0;
-    for(var h = 0;h<aspect.length;h++){
+    for (var h = 0; h < aspect.length; h++) {
         var score = i.getJsonDetail().aspects[aspect[h]].score;
         var absScore = Math.abs(score);
         console.log(absScore);
@@ -512,38 +597,38 @@ function sum(i,aspect){
     //var s = sum.toFixed(2);
     return sum;
 }
-function value(n,sum){
+function value(n, sum) {
     var value = 0.0;
     var v = 0.0;
     var q = 0.0;
-    value = (n/sum);
+    value = (n / sum);
     v = value.toFixed(2);
     q = value.toPrecision(2);
     //console.log(v);
     return v;
-    
+
 }
 var ob = {};
 var ar = [];
 
-function generateScattergraph(){
+function generateScattergraph() {
     var obj = readMe();
 }
-function generateScatterGrapgh(productid,scatter){
-    console.log("qpq: "+productid);
+function generateScatterGrapgh(productid, scatter) {
+    console.log("qpq: " + productid);
     //var obj = readMe();
     var details = getQRJSONOfProductDetails();
-    console.log("qpq: "+details);
+    console.log("qpq: " + details);
     ob = details[productid];
     console.log(details);
     ar = ob.aspectList;
-    var a=[];
+    var a = [];
     var b;
     var c;
     var d = [];
-    for(var i = 0;i<ar.length;i++){
-        b={};
-        c=[];
+    for (var i = 0; i < ar.length; i++) {
+        b = {};
+        c = [];
         console.log(ar[i]);
         console.log(ob.aspects[ar[i]].score);
         console.log(ob.aspects[ar[i]].freq);
@@ -553,7 +638,7 @@ function generateScatterGrapgh(productid,scatter){
         //console.log(w);
         c.push(v);
         c.push(w);
-        b={
+        b = {
             name: ar[i],
             color: 'rgba(223, 83, 83, .5)',
             data: c
@@ -564,11 +649,11 @@ function generateScatterGrapgh(productid,scatter){
     }
     var p = "#";
     p += productid + scatter;
-    scatterChart(d,p);
+    scatterChart(d, p);
     console.log(d);
 }
 
-function scatterChart(data,p){
+function scatterChart(data, p) {
     $(p).highcharts({
         chart: {
             type: 'scatter',
@@ -629,15 +714,15 @@ function scatterChart(data,p){
             }
         },
         series: [{
-            name: 'aspect',
-            color: 'rgba(223, 50, 50, .5)',
-            data: data
-        }]
+                name: 'aspect',
+                color: 'rgba(223, 50, 50, .5)',
+                data: data
+            }]
     });
 }
 
 da = [{
-            name: 'aspect',
-            color: 'rgba(223, 50, 50, .5)',
-            data: data
-        }];
+        name: 'aspect',
+        color: 'rgba(223, 50, 50, .5)',
+        data: data
+    }];
