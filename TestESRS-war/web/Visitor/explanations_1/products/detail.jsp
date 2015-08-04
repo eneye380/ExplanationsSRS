@@ -140,7 +140,8 @@
         <%--=productScoresMap--%>
         <%
             String[] data = null;
-            int n = 0;
+            int pos = 0;
+            int neg = 0;
             if (productScoresMap.containsKey(s)) {
                 Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
                 Set keyset = productScores.keySet();
@@ -154,9 +155,16 @@
                 data = new String[w];
                 while (ite.hasNext()) {
                     String key = (String) ite.next();
-                    //Map<String, Number> value = productScores.get(key);
-                    data[n] = key;
-                    n++;
+                    Map<String, Number> value = (Map) productScores.get(key);
+                    Number a = value.get("score");
+                    double val = a.doubleValue();
+                    double absVal = Math.abs(val);
+                    double ii = val / absVal;
+                    if(ii == 1.0){
+                        pos++;
+                    }else if(ii == -1.0){
+                        neg++;
+                    }
                 }
             }
         %>
@@ -210,9 +218,9 @@
                     }
 
                 }
-                                                %>
-            <% ArrayList<Double> l = new ArrayList(); %>
-            
+                                                                                %>
+            <% ArrayList<Double> l = new ArrayList();%>
+
             <%-- Collections.sort(l); --%>
             <%--for (Double e : l) {
                     out.println(e + "<br>");
@@ -223,6 +231,9 @@
                 <!--div class="col-md-2 col-sm-2 col-xs-12 well aspect">
                 <%@include file="../sidebar/sidebar.jsp" %>
             </div-->
+
+                <!--Side Bar Start><-->
+
                 <div class="col-md-2 col-sm-2 col-xs-12 well aspect">
                     <jsp:useBean id="category_1" class="aspect.bean.CategorySB" scope="request"/>
                     <%--jsp:getProperty name="category" property="catSet"/--%>
@@ -248,42 +259,45 @@
                     </div>
                     <div class="btn-group" style="margin-top: 10px">
                         <button type="button" class="btn btn-primary" id="button_aspect">Aspects</button>
-                        <button type="button" class="btn btn-primary" id="button_aspect_reset">Reset</button>
+                        <button type="button" class="btn btn-primary" id="button_aspect_reset" onclick="clearSelection('2')">Reset</button>
                     </div>
                     <div class="aspect_selection" style="display1:none;height:300px;overflow: auto">
                         <form onclick1="showMe()">
                             <%if (productScoresMap.containsKey(s)) {%>
-            <%
-                Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
-                Set keyset = productScores.keySet();
-                Iterator ite = keyset.iterator();
+                            <%
+                                Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
+                                Set keyset = productScores.keySet();
+                                Iterator ite = keyset.iterator();
 
-            %>
-            <%while (ite.hasNext()) {%>
-            <%
-                String key = (String) ite.next();
-                Map<String, Number> value = (Map) productScores.get(key);
-                Number a = value.get("score");
-                double val = a.doubleValue();
-                double absVal = Math.abs(val);
-                double ii = val / absVal;
-                l.add(val);
+                            %>
+                            <%while (ite.hasNext()) {%>
+                            <%
+                                String key = (String) ite.next();
+                                Map<String, Number> value = (Map) productScores.get(key);
+                                Number a = value.get("score");
+                                double val = a.doubleValue();
+                                double absVal = Math.abs(val);
+                                double ii = val / absVal;
+                                l.add(val);
 
-            %>
-            <%--if (ii == 1.0) {--%>
-            <!--li><%=key%> : <%=a%></li-->
-            <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
-            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this)"><%=key%></label></div>                            
-            <!--li><%=key%></li-->
-            <%--}--%>
-            <%}%>
-            <%}%>
-                            
+                            %>
+                            <%--if (ii == 1.0) {--%>
+                            <!--li><%=key%> : <%=a%></li-->
+                            <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
+                            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this,'2')"><%=key%></label></div>                            
+                            <!--li><%=key%></li-->
+                            <%--}--%>
+                            <%}%>
+                            <%}%>
+
                         </form>
 
                     </div>
                 </div>
 
+                <!--Side Bar End><-->
+
+                <!--Main Content Start><-->
 
                 <div class="col-md-10 col-sm-10 col-xs-12">
 
@@ -552,7 +566,7 @@
                             <div class="col-md-6 col-sm-6 col-sm-12 well">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5><em><span style='color:blue'>+ve</span></em><strong> sentiment's</strong></h5>
+                                        <h5><em><span style='color:blue'>+ve</span></em><strong> sentiment's (<%=pos%>)</strong></h5>
                                     </div>
                                 </div>
                                 <div class="caption thumbnail">
@@ -587,7 +601,7 @@
                             <div class="col-md-6 col-sm-6 col-sm-12 well">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        <h5><em><span style='color:red'>-ve</span></em><strong> sentiment's</strong></h5>
+                                        <h5><em><span style='color:red'>-ve</span></em><strong> sentiment's (<%=neg%>)</strong></h5>
                                     </div>
                                 </div>
                                 <div class="caption thumbnail">

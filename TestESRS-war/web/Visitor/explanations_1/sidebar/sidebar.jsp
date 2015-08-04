@@ -28,7 +28,7 @@
     </div>
 
 </div>
-<div class="btn-group" style="margin-top: 10px">
+<!--div class="btn-group" style="margin-top: 10px">
     <button type="button" class="btn btn-primary" id="button_aspect">Aspects</button>
 </div>
 <div class="aspect_selection">
@@ -45,4 +45,4 @@
         <div class="checkbox"><label><input type="checkbox" value="notice" name="aspect" class="asp_sel">Notice</label></div>
     </form>
 
-</div>
+</div-->

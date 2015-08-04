@@ -22,7 +22,7 @@ $(document).ready(function () {
     });
     $("#button_aspect_reset").click(function () {
 
-        clearSelection();
+        //clearSelection();
 
     });
     $("#aspects_scores").css("display", "none");
@@ -80,7 +80,7 @@ var tempobj, tempval;
 var asarr = [];
 
 var iii = 0;
-function aspectSelect(asp) {
+function aspectSelect(asp,s) {
     var asarrele = [];
     tempobj = asp;
     asarrele.push(tempobj);
@@ -90,7 +90,11 @@ function aspectSelect(asp) {
     iii++;
     if (asarr.length > 0) {
         if (iii <= 10) {
-            writeMe("2", asarr);
+            if(s==='2'){
+            writeMe(s, asarr);
+        }else if(s==='1'){
+            writeMe(s, asarr);
+        }
 
         } else {
             var c = document.getElementsByClassName('aspect_cb');
@@ -122,7 +126,7 @@ function aspectSelect(asp) {
 
 
 }
-function clearSelection() {
+function clearSelection(a) {
     var c = document.getElementsByClassName('aspect_cb');
 
     for (var b = 0; b < c.length; b++) {
@@ -131,8 +135,11 @@ function clearSelection() {
     }
     asarr = [] ;
     iii = 0;
-    writeMe("2", asarr);
-
+    if(a === '2'){
+    writeMe("2", null);
+    }else if(a === '1'){
+        writeMe("1", null);
+    }
 }
 function setDataArr(x) {
     console.log("x-x:");
@@ -192,7 +199,7 @@ function getProductJSONDetails() {
 function displayScores() {
     n("inyene");
 }
-
+//important
 var p = [];
 function readMe() {
     var array = getQRArrayOfProductList();
@@ -204,7 +211,9 @@ function readMe() {
         q.displayProductID();
         p.push(q);
     }
-    return p;
+    var r = p;
+    p = [];
+    return r;
 }
 var aspect = [];
 function setAspectArr(a) {
@@ -225,14 +234,15 @@ function setAspectArr(a) {
 }
 function getAspectArr() {
     var arr = aspect;
-    aspect = [];
+    //aspect = [];
     return arr;
     console.log("lklklklkmnmnmnmlklklklk");
 }
 var tt = " ";
+setAspectArr();
 function writeMe(n, as) {
 
-    setAspectArr();
+    
     
     if (as !== null) {
         var aspectArr = as;
@@ -519,7 +529,10 @@ function setSeries(data, p) {
     series.push(input);
 }
 function getSeries() {
-    return series;
+    //newly added
+    var s = series;
+    series = [];
+    return s;
 }
 var options;
 function setOptions(placeholder, data, ticks) {

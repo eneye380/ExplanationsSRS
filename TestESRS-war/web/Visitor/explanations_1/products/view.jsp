@@ -3,6 +3,8 @@
     Created on : Jul 16, 2015, 1:30:21 PM
     Author     : eneye380
 --%>
+<%@page import="java.util.Set"%>
+<%@page import="java.util.Iterator"%>
 <%--Visitor/explanations/products/products.jsp--%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
@@ -117,13 +119,17 @@
     <jsp:useBean id="aspectScore" class="aspect.bean.AspectScoreSB" scope="request"/>
     <jsp:setProperty name="aspectScore" property="prodid" value="<%=s%>"/>
     <jsp:setProperty name="aspectScore" property="recommSet" value="<%=myR%>"/>
-    <%
+    <%--
         Map<String, Map<String, Map<String, Number>>> scores = new HashMap();
         scores = aspectScore.retrieveAspectScores();
+    --%>
+    <%
+        Map<String, Map<String, Map<String, Number>>> productScoresMap = new HashMap();
+        productScoresMap = aspectScore.retrieveAspectScores();
     %>
     <!--jsp:getProperty name="aspectScore" property="scoreSet"/-->
     <!--%=scores%-->
-    <body id="body" onload="retrievePRJSONDetail('<%=s%>','1')">
+    <body id="body" onload="retrievePRJSONDetail('<%=s%>', '1')">
 
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
             <div class="container-fluid" >
@@ -157,11 +163,119 @@
             <!-- /.container -->
         </nav>
 
+
+
         <div class="row"  >
 
+            <!--div class="col-md-2 col-sm-2 col-xs-12 well aspect">
+            <%@include file="../sidebar/sidebar.jsp" %>
+        </div-->
+
+            <!--Side Bar Start><-->
+
+
             <div class="col-md-2 col-sm-2 col-xs-12 well aspect">
-                <%@include file="../sidebar/sidebar.jsp" %>
+                <jsp:useBean id="category_1" class="aspect.bean.CategorySB" scope="request"/>
+                <%--jsp:getProperty name="category" property="catSet"/--%>
+                <%
+                    ArrayList<CategorySB> cc = category_1.getCatSet();
+
+                %>
+
+
+                <div class="btn-group" style="margin-top: 5px;">
+                    <button type="button" class="btn btn-primary" id="button_category">Category</button>
+                </div>
+                <div class="category_selection" style="margin-top: 5px;display1:none">
+                    <div class="list-group ">
+                        <%for (int r = 0; r < cc.size(); r++) {%>
+                        <%CategorySB ct = cc.get(r);%>
+
+
+                        <a href="../products/category.jsp?category=<%=ct.getCategory()%>" class="list-group-item "><%=ct.getCategory()%></a>                    
+                        <%}%>
+                    </div>
+
+                </div>
+                <!-- Algorithm to finds common aspects-->
+                <% ArrayList<Double> l = new ArrayList();%>
+                <%
+                    //array storing common aspects
+                    ArrayList<String> e = new ArrayList();%>
+                <%
+                    Map<String, Map<String, Number>> qPS = productScoresMap.get(s);
+                    Set k = qPS.keySet();
+                    Iterator i = k.iterator();
+                    int count = 0;
+                    while (i.hasNext()) {
+
+                        String key = (String) i.next();
+                        //Map<String, Number> value = (Map) qPS.get(key);
+                        int sent = myR.size();
+                        for (int b = 0; b < myR.size(); b++) {
+                            Map<String, Map<String, Number>> rPS = productScoresMap.get(myR.get(b));
+                            if (rPS.containsKey(key)) {
+                                sent--;
+                            }
+                            if (sent == 0) {
+                                if (!e.contains(key)) {
+                                    e.add(key);
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+
+                %>
+
+                <div class="btn-group" style="margin-top: 10px">
+                    <button type="button" class="btn btn-primary btn-xs" id="button_aspect">Shared Aspects</button>
+                    <button type="button" class="btn btn-primary btn-xs" id="button_aspect_reset" onclick="clearSelection('1')">Reset</button>
+                </div>
+                <div class="aspect_selection" style="display1:none;height:300px;overflow: auto">
+                    
+                    <form>
+                        <%if(myR.size()!=0){%>
+                        <%for (int r = 0; r < e.size(); r++) {%>
+                        <%String key = e.get(r);%>
+                        <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this,'1')"><%=key%></label></div>                            
+                                <%}%>
+                        
+                        <%} else if(productScoresMap.containsKey(s)) {%>
+                            <%
+                                Map<String, Map<String, Number>> productScores = productScoresMap.get(s);
+                                Set keyset = productScores.keySet();
+                                Iterator ite = keyset.iterator();
+
+                            %>
+                            <%while (ite.hasNext()) {%>
+                            <%
+                                String key = (String) ite.next();
+                                Map<String, Number> value = (Map) productScores.get(key);
+                                Number a = value.get("score");
+                                double val = a.doubleValue();
+                                double absVal = Math.abs(val);
+                                double ii = val / absVal;
+                                l.add(val);
+
+                            %>
+                            <%--if (ii == 1.0) {--%>
+                            <!--li><%=key%> : <%=a%></li-->
+                            <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
+                            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this,'2')"><%=key%></label></div>                            
+                            <!--li><%=key%></li-->
+                            <%--}--%>
+                            <%}%>
+                            <%}%>
+
+                    </form>
+
+                </div>
             </div>
+            <%--=e--%>
+            <!--Side Bar End><-->
+
+            <!--Main Content Start><-->
 
 
             <div class="col-md-10 col-sm-10 col-xs-12">
@@ -214,13 +328,14 @@
                             </div>                                    
                         </div>
                     </div>
-                    
+
 
                     <div class="well" style="height:300px;overflow:scroll">
 
                         <div class="row text-left">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <h4 style="position: relative;top: -20px">Here are Recommended Products<a class="btn btn-success pull-right">Compare</a></h4>
+                                <h4 style="position: relative;top: -20px">Here are Recommended Products<!--a class="btn btn-success pull-right">Compare</a--></h4>
+                                <p style="position: relative;top: -20px">(<%=count%>) common aspects - change display from sidebar</p>
                             </div>
                         </div>
 
@@ -269,11 +384,15 @@
                                 </div>
                             </div>
                         </div>
-                        
+
 
                     </div>
                 </div>
             </div>
+
+            <!--Main Content End><-->
+
+
             <!-- /.container -->
             <div class="container">
 
