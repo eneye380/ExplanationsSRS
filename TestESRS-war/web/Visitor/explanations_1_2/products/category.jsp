@@ -167,11 +167,11 @@
                                 <!--p>Canon E0S 60D 18MP</p-->
                                 <p>
                                     <!--a href="productview.jsp" class="btn btn-primary">View</a> <a href="#" class="btn btn-default"></a-->
-                                <form action="product-recommendation-detail.jsp" style="display:inline">
+                                <form action="view.jsp" style="display:inline">
                                     <input type="hidden" name="product" id="prod_4" value="<%=pdr.getProdid()%>">
                                     <input type="submit" value="View" class="btn btn-primary" >
                                 </form>
-                                <form action="product-detail.jsp" style="display:inline">
+                                <form action="detail.jsp" style="display:inline">
                                     <input type="hidden" name="product" id="prod_4" value="<%=pdr.getProdid()%>">
                                     <input type="submit" value="Detail" class="btn btn-primary" >
                                 </form>
@@ -215,12 +215,11 @@
                 <%}%>
 
             </div>
+
         </div>
-</div>
-</div>
-<!-- /.container -->
-<div class="container">
+        <!-- /.container -->
+        <div class="container">
 
-    <hr>
+            <hr>
 
-    <%@include file="../footer/footer.jsp" %>
+            <%@include file="../footer/footer.jsp" %>

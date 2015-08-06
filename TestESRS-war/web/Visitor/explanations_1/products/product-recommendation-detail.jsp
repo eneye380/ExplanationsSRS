@@ -6,7 +6,7 @@
 
 <%@page import="java.util.Set"%>
 <%@page import="java.util.Iterator"%>
-<%--Visitor/explanations/products/products.jsp--%>
+<%--Visitor/explanations/products/product-recommendation-detail.jsp--%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="aspect.bean.CategorySB"%>
@@ -69,6 +69,10 @@
     .top_m6{
         position:relative;
         top:-60px;        
+    }
+    .top_m7{
+        position: relative;
+        top:-70px;
     }
     .desc{
         color:sienna;    
@@ -360,11 +364,11 @@
                                     <!-- qp_graph of query product-->
 
                                     <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 myBorder">
-                                            <div id="<%=s%>" id1="container" style="height:150px; "></div>                            
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div id="<%=s%>" id1="container" style="height:150px;background:white" onmouseover="showMult(this,'1')"></div>                            
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 myBorder">
-                                            <div id="<%=s%>" id1="container" style="height:150px;background:white"></div>                            
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                            <div id="<%=s%>_r" id1="container" style="height:150px;background:white" onmouseover="showMult(this,'2')"></div>                            
                                         </div>
                                     </div>
 
@@ -373,9 +377,9 @@
                                     <!--recommended products-->
                                     <div class="row text-left">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <p class="" style="position: relative;top: -20px"><strong>RECOMMENDED PRODUCTS</strong><span class="pull-right"><%=count%> common aspects</span><!--a class="btn btn-success pull-right">Compare</a--></p>
+                                            <p class="" style="position: relative;top: -20px"><strong>RECOMMENDED PRODUCTS</strong><span class="pull-right"><%=count%> common aspects</span></p>
                                             <!--p style="position: relative;top: -20px">(<%=count%>) common aspects</p-->
-                                            <p class="" style="position: relative;top: -20px"><a href="product-recommendation-comparison.jsp?product=<%=pdqp.getProdid()%>" class="btn btn-success btn- pull-right">Compare</a></p>
+                                            <p class="" style="position: relative;top: -20px"><a href="product-recommendation-comparison.jsp?product=<%=pdqp.getProdid()%>" class="btn btn-success btn-sm btn- pull-right">Compare</a></p>
                                         </div>
                                     </div>
                                     <div class="row" style="position: relative;top: -20px">                            
@@ -389,22 +393,22 @@
                                                 <%if (m != 0) {%>
                                                 <%pdr = d.get(m);%>
 
-                                                <div class="col-md-3 col-sm-6 col-xs-12 thumbnail" >
+                                                <div class="col-md-3 col-sm-6 col-xs-12 thumbnail"  id="23">
                                                     <!--img src="../../../img/<%=pdr.getProdid()%>.jpg" alt="" class="img-thumbnail" style="height:80px"-->
-                                                    <a href="product-recommendation-detail.jsp?product=<%=pdr.getProdid()%>"><img class="img-responsive " id="productimage" src="../../../img/<%=pdr.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="height:85px"></a>
+                                                    <a href="product-recommendation-detail.jsp?product=<%=pdr.getProdid()%>"><img class="img-responsive " onmouseover="showDes(this)" name="<%=pdr.getProdid()%>" src="../../../img/<%=pdr.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="height:85px"></a>
                                                     <div class="caption">     
-                                                        
+
                                                         <div style="height: 20px;overflow: hidden"><h6><%=pdr.getName()%></h6></div>
                                                         <!--product rating-->        
                                                         <%//star rating
-                                                                    String vv = pdr.getRating();
-                                                                    double rPsr = 0.0;
-                                                                    if (vv != null) {
-                                                                        if (!r.equalsIgnoreCase("null")) {
-                                                                            rPsr = Double.parseDouble(r);
-                                                                        }
-                                                                    }
-                                                                %>
+                                                            String vv = pdr.getRating();
+                                                            double rPsr = 0.0;
+                                                            if (vv != null) {
+                                                                if (!r.equalsIgnoreCase("null")) {
+                                                                    rPsr = Double.parseDouble(r);
+                                                                }
+                                                            }
+                                                        %>
                                                         <div style="position: relative;top: 5px;"><span class="stars"><%=rPsr%></span></div>
                                                         <!--/product-->
                                                         <p>
@@ -438,8 +442,54 @@
                             </div>
                             <div class="col-md-4 col-sm-4 col-xs-4">
                                 <div class="well">
-                                    <div class="thumbnail" style="height:195px"></div>
-                                    <div class="thumbnail" style="height:195px"></div>
+                                    
+                                    <div class="thumbnail" style="height:195px;overflow:auto">
+                                        <div class="product_graph_d text-center">
+                                            <p style="color:black;font-weight: bold" class="text-uppercase">
+                                            Display of Multi Bar
+                                            Chart by Hovering Over
+                                            the chart on the left
+                                            </p>
+                                        </div>
+                                        <div id="<%=s%>_mult_sentiment"  style="height:195px;display:none" class="product_graph_d"></div>  
+                                        <div id="<%=s%>_r_mult_rating"  style="height:195px;display:none" class="product_gragh_d"><p>hello</p></div>                            
+                                    </div>
+                                    
+                                    <div class="thumbnail" style="height:195px;overflow: auto">
+                                        
+                                        <div class="product_desc_d text-center">
+                                            <p style="color:black;font-weight: bold" class="text-uppercase">
+                                            Hover Over the 
+                                            Recommended product to view details
+                                            </p>
+                                        </div>
+                                        
+                                        <%Productdetail pdr_1 = null;%>
+                                        <%if ((d.size() > 1)) {%>
+                                        <%--for (int m = 0; m < d.size(); m++) {--%>
+                                        <%for (int m = 0; m < 4; m++) {%>
+                                        <%if (m != 0) {%>
+                                        <%pdr_1 = d.get(m);%>
+
+                                        <div style="display:none" id="i_<%=pdr_1.getProdid()%>" class="product_desc_d">
+                                            <h6 style="color: green"><%=pdr_1.getName()%></h6>
+                                            <p><span class="desc">Rating: </span><%=pdr_1.getRating()%></p>
+                                            <p class="top_m1"><span class="desc">Price: </span><%=pdr_1.getPrice()%></p>
+                                            <p class="top_m2"><span class="desc">Rank: </span><%=pdr_1.getRank()%></p>
+                                            <p class="top_m3"><span class="desc">Date: </span><%=pdr_1.getDate()%></p>
+                                            <p class="top_m4"><span class="desc">Category: </span><%=pdr_1.getCategory()%></p>
+                                            <p class="top_m5"><span class="desc">No. of Questions: </span><%=pdr_1.getNquestions()%></p> 
+                                            <p class="top_m6"><span class="desc">No. of Comments: </span><%=pdr_1.getNcomments()%></p>                                                
+                                            <p class="top_m7"><span class="desc">No. of Reviews: </span><%=pdr_1.getNreviews()%></p>
+                                        </div>
+
+                                        <%}%>
+                                        <%}%>
+                                        <%} else {%>                    
+                                        <h4 style="color:red">Sorry No Available Recommendations</h4>
+                                        <%}%>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>

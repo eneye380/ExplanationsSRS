@@ -70,17 +70,92 @@ $(document).ready(function () {
 
 
 });
-
 $(document).ready(function () {
 
 
+
+
 });
+//product-recommendation-detail getProductID for mult
+//1 for multiple bar
+//2 for single bar
+var h = 0;
+function showMult(m, n) {
+    var id, s;
+    var c = document.getElementsByClassName('product_graph_d');
+    console.log(c[9]);
+    for (var b = 0; b < c.length; b++) {
+        c[b].style.display = 'none';
+    }
+
+    if (n === '1') {
+
+        id = m.id.valueOf();
+        s = id + '_mult_sentiment';
+        if (h === 0) {
+            writeMe("1", null, s);
+            h++;
+        }
+
+    } else if (n === '2') {
+        id = m.id.valueOf();
+        s = id + '_mult_rating';
+        console.log(s);
+    }
+
+
+    var e = document.getElementById(s);
+
+    e.style.display = 'block';
+
+}
+//product-recommendation-detail getProductID for desc
+function showDes(m) {
+    var id = m.name.valueOf();
+    displayDes(id);
+}
+//product-recommendation-detail display desProductID  
+function displayDes(id) {
+    var s = 'i_';
+    s += id;
+
+    var c = document.getElementsByClassName('product_desc_d');
+    console.log(c[9]);
+    for (var b = 0; b < c.length; b++) {
+        c[b].style.display = 'none';
+    }
+
+    var e = document.getElementById(s);
+
+    e.style.display = 'block';
+}
+
+$(document).ready(function () {
+
+    $('span.stars').stars();
+
+
+});
+
+$.fn.stars = function () {
+    return $(this).each(function () {
+        // Get the value
+        var val = parseFloat($(this).html());
+        // Make sure that the value is in 0 - 5 range, multiply to get width
+        var size = Math.max(0, (Math.min(5, val))) * 16;
+        // Create stars holder
+        var $span = $('<span />').width(size);
+        // Replace the numerical value with stars
+        $(this).html($span);
+    });
+};
+
 
 var tempobj, tempval;
 var asarr = [];
 
 var iii = 0;
-function aspectSelect(asp,s) {
+function aspectSelect(asp, s) {
     var asarrele = [];
     tempobj = asp;
     asarrele.push(tempobj);
@@ -90,11 +165,11 @@ function aspectSelect(asp,s) {
     iii++;
     if (asarr.length > 0) {
         if (iii <= 10) {
-            if(s==='2'){
-            writeMe(s, asarr);
-        }else if(s==='1'){
-            writeMe(s, asarr);
-        }
+            if (s === '2') {
+                writeMe(s, asarr);
+            } else if (s === '1') {
+                writeMe(s, asarr);
+            }
 
         } else {
             var c = document.getElementsByClassName('aspect_cb');
@@ -133,14 +208,15 @@ function clearSelection(a) {
         c[b].disabled = false;
         c[b].checked = false;
     }
-    asarr = [] ;
+    asarr = [];
     iii = 0;
-    if(a === '2'){
-    writeMe("2", null);
-    }else if(a === '1'){
+    if (a === '2') {
+        writeMe("2", null);
+    } else if (a === '1') {
         writeMe("1", null);
     }
 }
+
 function setDataArr(x) {
     console.log("x-x:");
     console.log(x);
@@ -240,13 +316,12 @@ function getAspectArr() {
 }
 var tt = " ";
 setAspectArr();
-function writeMe(n, as) {
+function writeMe(n, as, dID) {
+    console.log(dID);
 
-    
-    
     if (as !== null) {
         var aspectArr = as;
-    }else {
+    } else {
         var aspectArr = getAspectArr();
     }
     console.log("len: " + aspectArr.length);
@@ -291,13 +366,23 @@ function writeMe(n, as) {
         }
         if (n === "1") {
             setSeries(data1, y + 1);
-            var id = obj[0].getProductID();
+            var id;
+            if (dID === undefined) {
+                id = obj[0].getProductID();
+            } else {
+                id = dID;
+            }
             if (y === obj.length - 1) {
                 setOptionsS(id, ticks1);
                 myChartS();
             }
         } else if (n === "2") {
-            setOptions(i.getProductID(), data1, ticks1);
+            if (dID === undefined) {
+                setOptions(i.getProductID(), data1, ticks1);
+            } else {
+                setOptions(dID, data1, ticks1);
+            }
+
             myChart();
         }
         //var createPlot = "c";
