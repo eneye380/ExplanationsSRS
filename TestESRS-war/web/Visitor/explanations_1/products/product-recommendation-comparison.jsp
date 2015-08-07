@@ -143,7 +143,7 @@
 %>
 <!--jsp:getProperty name="aspectScore" property="scoreSet"/-->
 <!--%=scores%-->
-<body id="body" onload="retrievePRJSONDetail('<%=s%>', '1')">
+<body id="body" onload="retrievePRJSONDetail('<%=s%>', '1','compare')">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
         <div class="container-fluid" >
@@ -312,6 +312,7 @@
                                 <div style="height:250px">
                                     <div id="<%=s%>" class="explanationbar" style="height:250px"></div>  
                                 </div>
+                                <!--aspect selection-->
                                 <h5>Aspect Selection</h5>
                                 <div class="thumbnail">
                                     <div class="">
@@ -322,7 +323,7 @@
                                         </div>
                                         <p class='text-primary'>Select aspect's from the check box below to change graph (<span class='text-danger '>maximum:10</span>)</p>
                                         <div class="aspect_selection" style="height:50px;overflow: auto">
-                                            
+
                                             <form style='color: rgb(50,50,10)'>
                                                 <%if (myR.size() != 0) {%>
                                                 <%for (int r = 0; r < e.size(); r++) {%>
@@ -362,13 +363,173 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--/aspect-->
                             </div>
                             <!--/explanation-->
-                            <!--aspect selection-->
-                            <div class="well">
 
+                            <!--Table of product comparison-->
+                            <div class="well">
+                                <div class="thumbnail">
+                                    <table class="table">
+                                        <tbody>
+                                            <!--product image and name-->
+                                            <tr class="text-center">
+                                                <!--td-->
+                                                <td>
+                                                    <a href="product-recommendation-detail.jsp?product=<%=pdqp.getProdid()%>"><img class="img-responsive " onmouseover="showDes(this)" name="<%=pdqp.getProdid()%>" src="../../../img/<%=pdqp.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="height:85px"></a>
+                                                    <div class="caption"> 
+                                                        <div style=""><h6><%=pdqp.getName()%></h6></div>                                                                                                          
+                                                    </div>
+                                                    <span class="pull-left" style="color:white"></span>
+                                                </td>
+                                                <!--/td-->
+
+                                                <!--td-->
+                                                <!--div class="row text-center "-->
+                                                <%Productdetail pdr = null;%>
+                                                <%if ((d.size() > 1)) {%>
+                                                <%--for (int m = 0; m < d.size(); m++) {--%>
+                                                <%for (int m = 0; m < 4; m++) {%>
+                                                <%if (m != 0) {%>
+                                                <%pdr = d.get(m);%>
+                                                <!--td-->
+                                                <td>
+                                                    <a href="product-recommendation-detail.jsp?product=<%=pdr.getProdid()%>"><img class="img-responsive " onmouseover="showDes(this)" name="<%=pdr.getProdid()%>" src="../../../img/<%=pdr.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="height:85px"></a>
+                                                    <div class="caption">
+                                                        <div style=""><h6><%=pdr.getName()%></h6></div>                                                                                                            
+                                                    </div>
+                                                    <span class="pull-left" style="color:white"></span>
+                                                </td> 
+                                                <!--/td-->
+                                                <!--hr-->
+                                                <%}%>
+                                                <%}%>
+                                                <%} else {%>                    
+                                                <td><h4 style="color:red">Sorry No Recommended Product Name</h4></td>
+                                                <%}%>
+                                                <!--/div-->
+
+                                                <!--/td-->
+                                            </tr>
+                                            <!--/product image and name-->
+
+                                            <!--product rating-->
+                                            <!--tr-->
+                                            <tr class="text-center">
+                                                <!--td-->
+                                                <td>                                                    
+                                                    <div class="caption">                                                         
+                                                        <!--product rating-->        
+                                                        <%//star rating
+                                                            String vv = pdqp.getRating();
+                                                            double sr = 0.0;
+                                                            if (vv != null) {
+                                                                if (!vv.equalsIgnoreCase("null")) {
+                                                                    sr = Double.parseDouble(vv);
+                                                                }
+                                                            }
+                                                        %>
+                                                        <div style="position: relative;top: 5px; margin: auto;width: 80px;"><span class="stars"><%=sr%></span></div>
+                                                        <!--/product-->                                                        
+                                                    </div>
+                                                    <span class="" style="color:black"><%=pdqp.getRating()%>/5.0</span>
+                                                </td>
+                                                <!--/td-->
+                                                <!--td-->
+                                                <!--div class="row text-center "-->
+                                                <%Productdetail pdr_1 = null;%>
+                                                <%if ((d.size() > 1)) {%>
+                                                <%--for (int m = 0; m < d.size(); m++) {--%>
+                                                <%for (int m = 0; m < 4; m++) {%>
+                                                <%if (m != 0) {%>
+                                                <%pdr_1 = d.get(m);%>
+                                                <!--td-->
+                                                <td>                                                    
+                                                    <div class="caption">                                                         
+                                                        <!--product rating-->        
+                                                        <%//star rating
+                                                            String v = pdr_1.getRating();
+                                                            double rPsr = 0.0;
+                                                            if (v != null) {
+                                                                if (!v.equalsIgnoreCase("null")) {
+                                                                    rPsr = Double.parseDouble(v);
+                                                                }
+                                                            }
+                                                        %>
+                                                        <!--/td-->                                                        
+                                                            <div style="position: relative;top: 5px; margin: auto;width: 80px;"><span class="stars"><%=rPsr%></span></div>                                                        
+                                                        <!--/td-->
+                                                        <!--/product-->                                                    
+                                                    </div>
+                                                     <span class="" style="color:black"><%=pdr_1.getRating()%>/5.0</span>
+                                                </td> 
+                                                <!--/td-->
+                                                <!--hr-->
+                                                <%}%>
+                                                <%}%>
+                                                <%} else {%>                    
+                                                <td><h4 style="color:red">Sorry No Recommended Product Rating</h4></td>
+                                                <%}%>
+                                                <!--/div-->
+
+                                                <!--/td-->
+                                            </tr>
+                                            <!--/product rating-->
+                                            
+                                            <!--product aspect graph-->
+                                            <!--tr-->
+                                            <tr class="text-center">
+                                                <!--td-->
+                                                <td>                                                    
+                                                    <div class="caption">                                                         
+                                                        <!--product aspect graph-->        
+                                                        
+                                                        <div id="<%=s%>_comp" id1="container" style="height:150px;background:white"></div>
+                                                        <!--/product-->                                                        
+                                                    </div>
+                                                    <span class="" style="color:black"></span>
+                                                </td>
+                                                <!--/td-->
+                                                <!--td-->
+                                                <!--div class="row text-center "-->
+                                                <%Productdetail pdr_2 = null;%>
+                                                <%if ((d.size() > 1)) {%>
+                                                <%--for (int m = 0; m < d.size(); m++) {--%>
+                                                <%for (int m = 0; m < 4; m++) {%>
+                                                <%if (m != 0) {%>
+                                                <%pdr_2 = d.get(m);%>
+                                                <!--td-->
+                                                <td>                                                    
+                                                    <div class="caption">                                                         
+                                                        <!--product aspect graph-->        
+                                                        
+                                                        <!--/td-->                                                        
+                                                            <div id="<%=pdr_2.getProdid()%>_comp" id1="container" style="height:150px;background:white"></div>                            
+                                                        <!--/td-->
+                                                        <!--/product-->                                                    
+                                                    </div>
+                                                     <span class="" style="color:black"></span>
+                                                </td> 
+                                                <!--/td-->
+                                                <!--hr-->
+                                                <%}%>
+                                                <%}%>
+                                                <%} else {%>                    
+                                                <td><h4 style="color:red">Sorry No Recommended Product Aspect Graph</h4></td>
+                                                <%}%>
+                                                <!--/div-->
+
+                                                <!--/td-->
+                                            </tr>
+                                            <!--/product aspect graph-->
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <!--/aspect-->
+                            <!--/table-->
+
 
                         </div>
                     </div>

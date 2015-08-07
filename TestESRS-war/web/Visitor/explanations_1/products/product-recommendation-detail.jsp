@@ -246,7 +246,7 @@
 
                 %>
 
-                <div class="btn-group" style="margin-top: 10px">
+                <!--div class="btn-group" style="margin-top: 10px">
                     <button type="button" class="btn btn-primary btn-xs" id="button_aspect">Shared Aspects</button>
                     <button type="button" class="btn btn-primary btn-xs" id="button_aspect_reset" onclick="clearSelection('1')">Reset</button>
                 </div>
@@ -288,7 +288,7 @@
 
                     </form>
 
-                </div>
+                </div-->
             </div>
             <%--=e--%>
             <!--Side Bar End><-->
@@ -357,7 +357,7 @@
                                                     <td><%=pdqp.getNreviews()%></td>
                                                 </tr> 
                                             </table> 
-                                            <!--/description-->                                                
+                                            <!--/description-->                                                                          
                                         </div>
                                     </div>
                                     <!--/detail-->
@@ -404,8 +404,8 @@
                                                             String vv = pdr.getRating();
                                                             double rPsr = 0.0;
                                                             if (vv != null) {
-                                                                if (!r.equalsIgnoreCase("null")) {
-                                                                    rPsr = Double.parseDouble(r);
+                                                                if (!vv.equalsIgnoreCase("null")) {
+                                                                    rPsr = Double.parseDouble(vv);
                                                                 }
                                                             }
                                                         %>

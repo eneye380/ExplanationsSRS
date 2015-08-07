@@ -160,47 +160,29 @@ function aspectSelect(asp, s) {
     tempobj = asp;
     asarrele.push(tempobj);
     var aspect = asp.value;
+
     asarr.push(aspect);
     tempobj.disabled = true;
-    iii++;
+
     if (asarr.length > 0) {
-        if (iii <= 10) {
+        if (iii < 10) {
             if (s === '2') {
                 writeMe(s, asarr);
             } else if (s === '1') {
                 writeMe(s, asarr);
             }
-
+            iii++;
         } else {
             var c = document.getElementsByClassName('aspect_cb');
             console.log(c[9]);
             for (var b = 0; b < c.length; b++) {
-                c[b].disabled = true;
-            }
+                c[b].disabled = true;                
+            }            
         }
-    }
-
-    console.log(tempobj);
+    }    
     console.log(window.document.location.search);
-    //tempobj.disabled = true;
-
-
-
-    tempval = aspect;
-    console.log(aspect);
-
-
-    var arr = getAspectArr();
-    console.log("LEN: " + arr.length);
-    console.log(arr);
-    if (arr.length < 10) {
-        console.log("king kong");
-        console.log(arr[2]);
-    }
-
-
-
 }
+
 function clearSelection(a) {
     var c = document.getElementsByClassName('aspect_cb');
 
@@ -217,16 +199,7 @@ function clearSelection(a) {
     }
 }
 
-function setDataArr(x) {
-    console.log("x-x:");
-    console.log(x);
-    var y = new Array();
-    y = x;
-    console.log(y[6]);
-}
-
-
-function retrievePRJSONDetail(queryProduct, u) {
+function retrievePRJSONDetail(queryProduct, u,page) {
 
     console.log("Testing 2: retrievePRJSONDetail() working");
     console.log("Ajax call: Function Start");
@@ -236,7 +209,7 @@ function retrievePRJSONDetail(queryProduct, u) {
     var type = "GET";
     var data = "product=" + queryProduct;
     console.log("Data: " + data);
-    var status = true;
+    var status = false;
     var dtype = 'json';
 
     $.ajax({
@@ -250,12 +223,22 @@ function retrievePRJSONDetail(queryProduct, u) {
             setProductJSONDetails(msg);
             setQRArrayOfProductList(msg);
             setQRJSONOfProductDetails(msg, queryProduct);
-            console.log(msg);
-            console.log("Ajax call: stop");
+            //console.log(msg);
+            //console.log("Ajax call: stop");
 
-            writeMe(u, null);
-
-            status = true;
+            
+            
+            
+             if (page === 'compare'){
+                status = writeMe(u, null);
+                console.log('status: '+status);
+                if(status === true){
+                    showGraphOnCompare(page);
+                }
+            }else if(page === undefined){
+                writeMe(u, null);
+            }
+            
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log("Error: " + jqXHR + " ,Status: " + textStatus + " ,ErrorThrown: " + errorThrown);
@@ -311,14 +294,17 @@ function setAspectArr(a) {
 function getAspectArr() {
     var arr = aspect;
     //aspect = [];
-    return arr;
-    console.log("lklklklkmnmnmnmlklklklk");
+    console.log(arr);
+    return arr;    
+}
+function showGraphOnCompare(page){
+    writeMe("2", null,page);    
 }
 var tt = " ";
 setAspectArr();
 function writeMe(n, as, dID) {
+    
     console.log(dID);
-
     if (as !== null) {
         var aspectArr = as;
     } else {
@@ -356,13 +342,17 @@ function writeMe(n, as, dID) {
 
             ticks.push(xaxis);
             data.push(datum);
-
+            
+            var ll = i.getJsonDetail().aspects[aspectArr[k]].score;
+            var l = parseFloat(ll);
             ticks1.push(aspectArr[k]);
-            //data1.push(i.jsonDetail.aspects[aspect[k]].score);
-            //data1.push(i.getJsonDetail().aspects[aspect[k]].score);
-            data1.push(v);
+            //non-nomilized
+            data1.push(l);
+            //nomilized
+            //data1.push(v);
             console.log(i.getJsonDetail());
-            console.log(v);
+            console.log('aspect name: '+aspectArr[k]+' - nomilized value: '+v);
+            console.log('aspect name: '+aspectArr[k]+' - non-nomilized value: '+l);
         }
         if (n === "1") {
             setSeries(data1, y + 1);
@@ -379,7 +369,12 @@ function writeMe(n, as, dID) {
         } else if (n === "2") {
             if (dID === undefined) {
                 setOptions(i.getProductID(), data1, ticks1);
-            } else {
+            } else if (dID === 'compare'){
+                var id = i.getProductID() + '_comp';
+                alert('hello');
+                setOptions(id, data1, ticks1);
+                
+            }else {
                 setOptions(dID, data1, ticks1);
             }
 
@@ -395,6 +390,7 @@ function writeMe(n, as, dID) {
         //setOptions(i.getProductID(), data1, ticks1);
         //myChart();
     }
+    return true;
 }
 
 var qandrPList = [];
