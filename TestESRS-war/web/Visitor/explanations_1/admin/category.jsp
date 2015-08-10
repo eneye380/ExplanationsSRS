@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : Aug 7, 2015, 10:15:27 PM
+    Document   : category
+    Created on : Aug 9, 2015, 9:52:47 AM
     Author     : eneye380
 --%>
 
@@ -131,65 +131,33 @@
         <div class="row"  >
 
         </div>
-
-        <%--jsp:useBean id="category" class="aspect.bean.CategorySB" scope="request"/--%>
+        <jsp:useBean id="category" class="aspect.bean.CategorySB" scope="request"/>
         <%--jsp:getProperty name="category" property="catSet"/--%>
-        <%--
-            ArrayList<CategorySB> c = category.getCatSet();
-
-        --%>
 
         <%
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            ArrayList<String> psswords = new ArrayList();
-            psswords.add("pxstar");
-            psswords.add("root");
-            if (username == null) {
-                username = "default";
-            }
-            
-            if(psswords.contains(password)){
-                pageContext.setAttribute("username", username);
-            }
-            if (username != null) {
-                pageContext.setAttribute("user", username,PageContext.SESSION_SCOPE);
+            ArrayList<CategorySB> c = category.getCatSet();
+
         %>
-<js>
-        <p>Hello, (You can
-            <a href="<%= request.getRequestURI()%>">sign out</a>.)</p>
-        <p><%=username%></p>
-        <p><%=password%></p>
-        <p><%=pageContext.getAttribute("user",PageContext.SESSION_SCOPE)%></p>
-        <jsp:forward page="adminconsole.jsp?category=digital slr" />
-            <%
-            } else {
-            %>
-        <p>Hello!
-            <a href="<%=request.getRequestURI()%>">Sign in</a>
-            to include your name with greetings you post.</p>
-            <%
-                }
-            %>
+        <div class="jumbotron text-center" style="background: rgb(10,50,50)">
+            <span style="color:white;margin-bottom:20px;display:block">Welcome, <%=pageContext.getAttribute("user", PageContext.SESSION_SCOPE)%></span>
+            <!--span style="color:white"><%=PageContext.SESSION_SCOPE%></span-->
+            <div class="thumbnail">
+                <h3>Explanation Facility for Social Recommender Systems</h3>
+                <h4>Management Console</h4>
+            </div>
+        </div>
+        <div class="well text-center">            
+            <div class="btn-group" style="margin-top: 5px;">
+                <button type="button" class="btn btn-primary" id="button_category">Category</button>
+            </div>
+            <div class="category_selection" style="margin-top: 5px;display1:none">
+                <div class="list-group ">
+                    <%for (int r = 0; r < c.size(); r++) {%>
+                    <%CategorySB ct = c.get(r);%>
+                    <a href="products.jsp?category=<%=ct.getCategory()%>" class="list-group-item " style="background: rgb(10,50,50);color:white"><%=ct.getCategory()%></a>                    
+                    <%}%>
+                </div>
 
-        <div class="jumbotron" style="background: rgb(10,50,50);color: #2e6da4">
-            <div style="margin: 100px">
-                <form action="index.jsp" method="post">
-                    <table style="margin: auto;text-align: center;" class="text-capitalize">
-                        <tr>
-                            <td>Username</td>
-                            <td><input type="text" name="username" placeholder="username"></td>
-                        </tr>
-                        <tr>
-                            <td>Password</td>
-                            <td><input type="password" name="password" placeholder="password"></td>
-                        </tr>
-                        <tr>
-
-                            <td colspan="2"><input type="submit" value="LOGIN"></td>
-                        </tr>
-                    </table>
-                </form>
             </div>
         </div>
 
@@ -203,4 +171,3 @@
     <hr>
 
     <%@include file="../footer/footer.jsp" %>
-

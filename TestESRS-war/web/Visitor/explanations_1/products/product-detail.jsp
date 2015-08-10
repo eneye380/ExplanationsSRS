@@ -16,6 +16,8 @@
 <%@page import="aspect.bean.ProductSetSB"%>
 <%@page import="aspect.model.Productdetail"%>
 <%@page import="aspect.bean.ProductSB"%>
+<%@page import="aspect.bean.ProductReviewSB" %>
+<%@page import="aspect.model.Productreview"%>
 <%@page import="aspect.model.Queryproductandrecommendation"%>
 <%@page import="java.util.ArrayList"%>
 <%@page  import="aspect.bean.ProductSBLocal"%>
@@ -71,8 +73,27 @@
         position:relative;
         top:-60px;        
     }
+    .top_m7{
+        position:relative;
+        top:-70px;        
+    }
+    .top_m8{
+        position:relative;
+        top:-70px; 
+        margin-bottom: -70px;
+    }
     .desc{
         color:sienna;         
+    }
+    span.stars, span.stars span {
+        display: block;
+        background: url(../../../img/stars.png) 0 -16px repeat-x;
+        width: 80px;
+        height: 16px;        
+    }
+
+    span.stars span {
+        background-position: 0 0;
     }
     table tr:nth-child(even) {
         background-color: #eee;
@@ -161,15 +182,24 @@
                     double val = a.doubleValue();
                     double absVal = Math.abs(val);
                     double ii = val / absVal;
-                    if(ii == 1.0){
+                    if (ii == 1.0) {
                         pos++;
-                    }else if(ii == -1.0){
+                    } else if (ii == -1.0) {
                         neg++;
                     }
                 }
             }
         %>
         <%--=data[0]--%>
+        <jsp:useBean id="reviewDetail" class="aspect.bean.ProductReviewSB" scope="request"/>
+        <jsp:setProperty name="reviewDetail" property="prodid" value="<%=s%>"/>
+        <jsp:setProperty name="reviewDetail" property="recommSet" value="<%=myR%>"/>
+        <%
+            Map<String, Map<String, Map<String, String>>> productReviewMap = new HashMap();
+            productReviewMap = reviewDetail.retrieveProductReview();
+        %>
+        <!--jsp:getProperty name="reviewDetail" property="productReviewSet"/-->
+        <%--=productScoresMap--%>
         <body id="body" onload="retrievePRJSONDetail('<%=s%>', '2')">
 
             <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" >
@@ -219,7 +249,7 @@
                     }
 
                 }
-                                                                                %>
+                                                                            %>
             <% ArrayList<Double> l = new ArrayList();%>
 
             <%-- Collections.sort(l); --%>
@@ -285,7 +315,7 @@
                             <%--if (ii == 1.0) {--%>
                             <!--li><%=key%> : <%=a%></li-->
                             <!--label class='checkbox-inline'><input type="checkbox" value="<%=key%>"><%=key%></label-->
-                            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this,'2')"><%=key%></label></div>                            
+                            <div class="checkbox"><label><input type="checkbox" value="<%=key%>" name="aspect<%=key%>" class="aspect_cb" onclick="aspectSelect(this, '2')"><%=key%></label></div>                            
                             <!--li><%=key%></li-->
                             <%--}--%>
                             <%}%>
@@ -299,6 +329,57 @@
                 <!--Side Bar End><-->
 
                 <!--Main Content Start><-->
+                <%
+                    String[] data1 = null;
+                    int freq1 = 0;
+                    int freq2 = 0;
+                    int freq3 = 0;
+                    int freq4 = 0;
+                    int freq5 = 0;
+                    int totalcomments = 0;
+                    String author, productid, badges, helpfulranking, title, date, rating, npeopleuseful, npeoplevoted, ncomments, comment;
+                    if (productReviewMap.containsKey(s)) {
+                        Map<String, Map<String, String>> productReviews = productReviewMap.get(s);
+                        Set keyset = productReviews.keySet();
+                        Iterator ite = keyset.iterator();
+                        Iterator it = keyset.iterator();
+                        int w = 0;
+                        while (it.hasNext()) {
+                            it.next();
+                            w++;
+                        }
+                        data = new String[w];
+                        while (ite.hasNext()) {
+                            String key = (String) ite.next();
+                            Map<String, String> value = (Map) productReviews.get(key);
+                            author = value.get("author");
+                            productid = value.get("productid");
+                            badges = value.get("badges");
+                            helpfulranking = value.get("helpfulranking");
+                            title = value.get("title");
+                            date = value.get("date");
+                            rating = value.get("rating");
+                            npeopleuseful = value.get("npeopleuseful");
+                            npeoplevoted = value.get("npeoplevoted");
+                            ncomments = value.get("ncomments");
+                            comment = value.get("comment");
+
+                            double val = Double.parseDouble(rating);
+                            totalcomments++;
+                            if (val == 5.0) {
+                                freq5++;
+                            } else if (val == 4.0) {
+                                freq4++;
+                            } else if (val == 3.0) {
+                                freq3++;
+                            } else if (val == 2.0) {
+                                freq2++;
+                            } else if (val == 1.0) {
+                                freq1++;
+                            }
+                        }
+                    }
+                %>
 
                 <div class="col-md-10 col-sm-10 col-xs-12">
 
@@ -313,6 +394,18 @@
                             <div class="col-md-3 col-sm-6 col-xs-12">
                                 <div>
                                     <img class="img-responsive" src="../../../img/<%=pdqp.getProdid()%>.jpg" alt="image of <%=pdqp.getProdid()%>" id="query_prod_img" style="height:150px">
+                                    <%//star rating
+                                        String r1 = pdqp.getRating();
+                                        double sr = 0.0;
+                                        if (r1 != null) {
+                                            if (!r1.equalsIgnoreCase("null")) {
+                                                sr = Double.parseDouble(r1);
+                                            }
+                                        }
+                                    %>
+                                    <!--star rating of query product-->
+                                    <div style="position: relative;top: 5px;"><span class="stars"><%=sr%></span></div>
+                                    <!--/star-->
                                 </div>
                                 <div class="row welll" style="position: relative;top: 0px" >                            
                                     <div class="col-md-12 col-sm-12 col-xs-12" style="position: relative;top: 0px"> 
@@ -552,7 +645,9 @@
                         </div>
                         <div class='row' id='product_reviews' style='display:none'>
                             <div class='col-md-12 col-sm-12 col-xs-12' >
+
                                 <h4>Customer Review</h4>
+                                <h5>Total Number of Reviews: <%=totalcomments%></h5>
                                 <div class='thumbnail'>
                                     <p style='color:rosybrown'>anony</p>
                                     <p class='text-right'>great product</p>
@@ -561,6 +656,87 @@
                                     <p style='color:rosybrown'>pxstar</p>
                                     <p class='text-right'>This is an awesome camera for an entry level DSLR, in my mind Nikon's the best</p>
                                 </div>
+                                <table>
+                                    <tr>
+                                        <th>Rating</th>
+                                        <th>Frequency</th>
+                                    </tr>
+                                    <tr>
+                                        <td>5.0</td>
+                                        <td><%=freq5%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4.0</td>
+                                        <td><%=freq4%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3.0</td>
+                                        <td><%=freq3%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.0</td>
+                                        <td><%=freq2%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>1.0</td>
+                                        <td><%=freq1%></td>
+                                    </tr>
+                                </table>
+                                <%
+                                    //String[] data11 = null;
+                                    double srr = 0.0;
+                                    String author1, productid1, badges1, helpfulranking1, title1, date1, rating1, npeopleuseful1, npeoplevoted1, ncomments1, comment1;
+                                %>
+                                <%if (productReviewMap.containsKey(s)) {%>
+                                <%Map<String, Map<String, String>> productReviews = productReviewMap.get(s);
+                                    Set keyset = productReviews.keySet();
+                                    Iterator ite = keyset.iterator();
+                                    Iterator it = keyset.iterator();
+                                    int w = 0;
+                                    while (it.hasNext()) {
+                                        it.next();
+                                        w++;
+                                    }
+                                    data = new String[w];
+                                    while (ite.hasNext()) {
+                                        String key = (String) ite.next();
+                                        Map<String, String> value = (Map) productReviews.get(key);
+                                        author1 = value.get("author");
+                                        productid1 = value.get("productid");
+                                        badges1 = value.get("badges");
+                                        helpfulranking1 = value.get("helpfulranking");
+                                        title1 = value.get("title");
+                                        date1 = value.get("date");
+                                        rating1 = value.get("rating");
+                                        npeopleuseful1 = value.get("npeopleuseful");
+                                        npeoplevoted1 = value.get("npeoplevoted");
+                                        ncomments1 = value.get("ncomments");
+                                        comment1 = value.get("comment");
+
+                                        srr = Double.parseDouble(rating1);
+
+
+                                %>
+                                <div class='thumbnail'>
+                                    <!--star rating of query product-->
+                                    <div style="position: relative;top: 5px;"><span class="stars"><%=srr%></span></div>
+                                    <!--/star-->
+                                    <p style='color:rosybrown'><span class="pull-right">Author: <%=author1%></span></p>
+
+                                    <p><span class="desc"></span></p>
+                                    <p class="top_m1"><span class="desc">Badges: </span><%=badges1%></p>
+                                    <p class="top_m2"><span class="desc">Helpfulranking: </span><%=helpfulranking1%></p>
+                                    <p class="top_m3"><span class="desc">Title: </span><%=title1%></p>
+                                    <p class="top_m4"><span class="desc">Date: </span><%=date1%></p>
+                                    <p class="top_m5"><span class="desc">No. of People Useful: </span><%=npeopleuseful1%></p> 
+                                    <p class="top_m6"><span class="desc">No. of People Voted: </span><%=npeoplevoted1%></p>                                                
+                                    <p class="top_m7"><span class="desc">No. of Comments: </span><%=ncomments1%></p>
+                                    <p class='text-right top_m8' style='color:rgb(10,50,50)'><%=comment1%></p>
+                                </div>
+                                <%}%>
+                                <%}%>
+
+
                             </div>
                         </div>
                         <div class="row" id="aspects_scores" style="display:none">                        

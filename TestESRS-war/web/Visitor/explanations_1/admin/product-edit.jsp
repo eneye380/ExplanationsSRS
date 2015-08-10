@@ -1,9 +1,10 @@
 <%-- 
-    Document   : index
-    Created on : Aug 7, 2015, 10:15:27 PM
+    Document   : product-edit
+    Created on : Aug 9, 2015, 10:31:33 AM
     Author     : eneye380
 --%>
 
+<%@page import="java.io.File"%>
 <%@page import="aspect.bean.CategoryChoiceSB"%>
 <%--Visitor/explanations/products/products.jsp--%>
 <%@page import="java.util.Map"%>
@@ -12,6 +13,7 @@
 <%@page import="aspect.bean.ProductSetSB"%>
 <%@page import="aspect.model.Productdetail"%>
 <%@page import="aspect.bean.ProductSB"%>
+<%@page import="aspect.db_connection.DBUpdate"%>
 <%@page import="aspect.model.Queryproductandrecommendation"%>
 <%@page import="java.util.ArrayList"%>
 <%@page  import="aspect.bean.ProductSBLocal"%>
@@ -131,65 +133,78 @@
         <div class="row"  >
 
         </div>
-
-        <%--jsp:useBean id="category" class="aspect.bean.CategorySB" scope="request"/--%>
+        <jsp:useBean id="category" class="aspect.bean.CategorySB" scope="request"/>
         <%--jsp:getProperty name="category" property="catSet"/--%>
-        <%--
-            ArrayList<CategorySB> c = category.getCatSet();
-
-        --%>
 
         <%
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            ArrayList<String> psswords = new ArrayList();
-            psswords.add("pxstar");
-            psswords.add("root");
-            if (username == null) {
-                username = "default";
-            }
-            
-            if(psswords.contains(password)){
-                pageContext.setAttribute("username", username);
-            }
-            if (username != null) {
-                pageContext.setAttribute("user", username,PageContext.SESSION_SCOPE);
+            ArrayList<CategorySB> c = category.getCatSet();
+
         %>
-<js>
-        <p>Hello, (You can
-            <a href="<%= request.getRequestURI()%>">sign out</a>.)</p>
-        <p><%=username%></p>
-        <p><%=password%></p>
-        <p><%=pageContext.getAttribute("user",PageContext.SESSION_SCOPE)%></p>
-        <jsp:forward page="adminconsole.jsp?category=digital slr" />
-            <%
-            } else {
-            %>
-        <p>Hello!
-            <a href="<%=request.getRequestURI()%>">Sign in</a>
-            to include your name with greetings you post.</p>
-            <%
-                }
-            %>
+        <div class="thumbnail text-center" style="background: rgb(10,50,50)">
+            <span style="color:white;margin-bottom:20px;display:block">Welcome, <%=pageContext.getAttribute("user", PageContext.SESSION_SCOPE)%></span>
+            <!--span style="color:white"><%=PageContext.SESSION_SCOPE%></span-->
+            <div class="thumbnail">
+                <h3>Explanation Facility for Social Recommender Systems</h3>
+                <h4>Management Console</h4>
+            </div>
+        </div>
+        <jsp:useBean id="dbupdate" class="aspect.db_connection.DBUpdate" scope="request"/>
+        <%--jsp:getProperty name="category" property="catSet"/--%>
 
-        <div class="jumbotron" style="background: rgb(10,50,50);color: #2e6da4">
-            <div style="margin: 100px">
-                <form action="index.jsp" method="post">
-                    <table style="margin: auto;text-align: center;" class="text-capitalize">
-                        <tr>
-                            <td>Username</td>
-                            <td><input type="text" name="username" placeholder="username"></td>
-                        </tr>
-                        <tr>
-                            <td>Password</td>
-                            <td><input type="password" name="password" placeholder="password"></td>
-                        </tr>
-                        <tr>
+        <%
+            ArrayList<String> t = dbupdate.retrieveTableNames();
 
-                            <td colspan="2"><input type="submit" value="LOGIN"></td>
-                        </tr>
-                    </table>
-                </form>
+        %>
+        <div class="">
+            <h4>ADMIN:  <span style="color:black;margin-bottom:20px;"><%=pageContext.getAttribute("user", PageContext.SESSION_SCOPE)%></span></h4>
+            <div class="row">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+
+                    <div class="btn-group-vertical">
+
+                        <%for (int r = 0; r < t.size(); r++) {%> 
+                        <%if (!t.get(r).equalsIgnoreCase("queryproductandrecommendation")) {%>
+                        <button type="button" class="btn btn-primary" style="background: rgb(10,50,50)"><%=t.get(r)%></button> 
+                        <%}%>
+                        <%}%>
+
+                    </div>
+
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                    <div class="well">
+                        <div class="thumbnail">
+                            <div class="well">
+                                <form name="dbForm" action="product-edit.jsp">
+                                    <input type="file" name="path" value="" width="100" />
+                                    <input type="submit" value="mySubmit" />
+                                </form>
+                                <%
+                                    String value = request.getParameter("path");
+                                %>
+                                <%if(value==null){%>
+                                <p>Empty</P>
+                                <%}else{%>
+                                <p>Path: <%=value%></p>
+                                <%}%>
+                                <%
+                                    File folder = new File("C:\\Users\\eneye380\\Documents\\MSc RGU Project\\New folder\\Product reviews\\Product reviews\\B003VWDSJO\\");
+                                    File[] listOfFiles = folder.listFiles();
+
+                                    for (int i = 0; i < listOfFiles.length; i++) {
+                                        File file = listOfFiles[i];
+                                        if (file.isFile() && file.getName().endsWith(".txt")) {
+                                            
+                                            /* do somthing with content */
+                                        }
+                                    }
+
+                                %>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -203,4 +218,3 @@
     <hr>
 
     <%@include file="../footer/footer.jsp" %>
-
